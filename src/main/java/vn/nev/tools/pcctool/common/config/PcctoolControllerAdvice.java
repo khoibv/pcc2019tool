@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import vn.stp.common.MessageCd;
-import vn.stp.common.exception.StpSalaryException;
-import vn.stp.dto.ResponseDto;
-import vn.stp.util.ResourceUtil;
+import vn.nev.tools.pcctool.common.MessageCd;
+import vn.nev.tools.pcctool.common.PcctoolException;
+import vn.nev.tools.pcctool.dto.ResponseDto;
+import vn.nev.tools.pcctool.util.ResourceUtil;
 
 @RestControllerAdvice
-public class StpSalaryControllerAdvice extends ResponseEntityExceptionHandler {
+public class PcctoolControllerAdvice extends ResponseEntityExceptionHandler {
 
   @Autowired
   private ResourceUtil resourceUtil;
@@ -29,7 +29,7 @@ public class StpSalaryControllerAdvice extends ResponseEntityExceptionHandler {
       HttpStatus status = getStatus(request);
       return new ResponseEntity<>(ResponseDto.error(MessageCd.E0001, resourceUtil.getMessage(MessageCd.E0001)), status);
     } else {
-      throw new StpSalaryException(ex);
+      throw new PcctoolException(ex);
     }
   }
 

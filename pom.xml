@@ -65,7 +65,7 @@
 	</dependencies>
 
 	<scm>
-		<url>https://helixteamhub.cloud/philongtm/projects/salary/repositories/subversion/salary</url>
+		<url>git@github.com:nev-khoibv/pcc2019tool.git</url>
 		<connection>scm:svn:${project.scm.url}</connection>
 		<developerConnection>scm:svn:${project.scm.url}</developerConnection>
 		<tag>HEAD</tag>
@@ -106,7 +106,7 @@
 					<resources>
 						<resource>
 							<source>
-								<directory>${basedir}/src/main/resources/static/scss</directory>
+								<directory>${basedir}/src/main/resources/static/css/scss</directory>
 								<includes>
 									<include>**/*.scss</include>
 								</includes>
@@ -122,10 +122,8 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<excludes>
-					<exclude>static/bootstrap/**</exclude>
-					<exclude>static/scss/**</exclude>
+					<exclude>static/css/scss/**</exclude>
 					<exclude>**/*.css.map</exclude>
-					<exclude>ddl.sql</exclude>
 				</excludes>
 			</resource>
 		</resources>
@@ -139,7 +137,7 @@
 			</activation>
 			<properties>
 				<artifact-packaging>jar</artifact-packaging>
-				<start-class>vn.stp.SalaryApplication</start-class>
+				<start-class>vn.nev.tools.pcctool.PcctoolApplication</start-class>
 				<spring.profiles.active>development</spring.profiles.active>
 			</properties>
 			<build>
@@ -184,7 +182,7 @@
 			<id>production</id>
 			<properties>
 				<artifact-packaging>war</artifact-packaging>
-				<start-class>vn.stp.SalaryWebApplication</start-class>
+				<start-class>vn.nev.tools.pcctool.PcctoolWebApplication</start-class>
 				<spring.profiles.active>production</spring.profiles.active>
 			</properties>
 			<build>
@@ -227,7 +225,7 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!-- Get SVN information -->
+					<!-- Get VCS information -->
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>buildnumber-maven-plugin</artifactId>
