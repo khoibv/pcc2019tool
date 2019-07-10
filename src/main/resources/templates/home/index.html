@@ -1,0 +1,31 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/normal}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+  <title>Home</title>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+  <script src="//www.chartjs.org/samples/latest/utils.js"></script>
+</head>
+<th:block layout:fragment="content">
+  <div class="row">
+    <div class="col-md-6 col-lg-4" th:insert="~{home/dashboard/job-part :: job-list}"></div>
+    <div class="col-md-6 col-lg-4"
+         th:if="${!#authorization.expression('hasAnyRole(''ADMINISTRATOR'',''SALE'',''LEADER'')')}"
+         th:include="home/dashboard/job-editor-part :: part"></div>
+    <div th:include="home/notify-task-status :: stp-notify-ws-statistic"
+         class="col-xs-12 col-md-8 col-lg-4"
+         sec:authorize="hasAnyRole('ADMINISTRATOR', 'LEADER')"
+         th:if="${@environment.getProperty('application.websocket.enable') == 'true'}"></div>
+  </div>
+  <div class="text-danger">
+    <span th:text="#{__${Message}__}"></span>
+    <span>[[#{__${Message}__}]]</span>
+  </div>
+
+</th:block>
+<th:block layout:fragment="script">
+</th:block>
+
+</html>

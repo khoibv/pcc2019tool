@@ -1,0 +1,91 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/normal}">
+
+<th:block layout:fragment="content">
+  <h5>Edit profile</h5>
+  <form th:object="${user}" th:action="@{/user/profile}" method="post">
+    <div class="form-group row">
+      <input type="hidden" th:field="*{id}">
+      <label class="col-sm-3 control-label" th:text="#{user.columns.userName}">user name</label>
+      <label class="col-sm-3 control-label text-left" th:text="${user.userName}">admin</label>
+      <input type="hidden" th:field="*{userName}">
+    </div>
+
+
+    <div class="form-group row">
+      <label class="col-sm-3 control-label" th:text="#{user.columns.email}">email</label>
+      <label class="col-sm-3 control-label text-left" th:text="${user.email}">admin@stp.com</label>
+      <input type="hidden" th:field="*{email}">
+    </div>
+
+
+    <div class="form-group row">
+      <label class="col-sm-3 control-label" th:text="#{user.columns.department}">department</label>
+      <label class="col-sm-3 control-label text-left"
+             th:text="${user.departmentName}">Editors</label>
+      <input type="hidden" th:field="*{departmentName}">
+    </div>
+
+
+    <div class="form-group row required">
+      <label for="fullName"
+             class="col-sm-3 control-label"
+             th:text="#{user.columns.fullName}">nameeee</label>
+      <div class="col-sm-3">
+        <input type="text"
+               class="form-control"
+               th:classappend="${#fields.hasErrors('fullName') ? 'is-invalid' : ''}"
+               id="fullName"
+               th:maxlength="${T(vn.stp.common.ColumnLengths).USER_FULL_NAME}"
+               th:field="*{fullName}"
+               th:errorclass="is-invalid">
+        <span class="invalid-feedback"
+              th:if="${#fields.hasErrors('fullName')}"
+              th:errors="*{fullName}"></span>
+      </div>
+    </div>
+
+
+    <div class="form-group row">
+      <label for="photoUrl"
+             class="col-sm-3 control-label"
+             th:text="#{user.columns.photoUrl}">nameeee</label>
+      <div class="col-sm-9">
+        <input type="hidden"
+               class="form-control"
+               id="photoUrl"
+               th:field="*{photoUrl}">
+        <th:block th:insert="~{layout/components :: stp-img-crop-upload(
+          uploadUrl=@{/user/profile/uploadAvatar},
+          avatarUrl=@{/avatar},
+          title=${'Change your avatar'},
+          oldAvatarUrl=@{${user.photoUrl}},
+          acceptType=${'image/*'},
+          success=${'processAfterFileUploaded'}
+          )}"/>
+        <span class="invalid-feedback"
+              th:if="${#fields.hasErrors('photoUrl')}"
+              th:errors="*{photoUrl}"></span>
+      </div>
+    </div>
+
+
+    <div class="text-right">
+      <button type="submit" class="btn btn-primary" th:text="#{common.save}">Save</button>
+      <a class="btn btn-primary" th:href="@{/}" th:text="#{common.close}">close</a>
+    </div>
+  </form>
+</th:block>
+<th:block layout:fragment="script">
+  <script type="text/javascript" th:inline="javascript">
+    function processAfterFileUploaded(filename) {
+      $('#photoUrl').val('/avatar/' + filename);
+    }
+  </script>
+  <script th:src="@{/js/user.js}"></script>
+</th:block>
+
+</html>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="true" scanPeriod="10 seconds">
+
+  <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+
+  <springProfile name="production">
+    <property name="LOG_PATH" value="/var/stp/logs"/>
+  </springProfile>
+  <springProfile name="development">
+    <property name="LOG_PATH" value="logs"/>
+  </springProfile>
+  <property name="LOG_FILE_NAME" value="stp_salary"/>
+  <property name="LOG_PATTERN"
+    value='%date{"yyyy-MM-dd HH:mm:ss,SSS"} [%thread] %-5level %logger - %msg%n'/>
+  <property name="CONSOLE_PATTERN"
+    value="${CONSOLE_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%logger){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+  <!-- APPENDER -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+      <layout class="ch.qos.logback.classic.PatternLayout">
+        <pattern>${CONSOLE_PATTERN}</pattern>
+      </layout>
+    </encoder>
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+    <append>true</append>
+    <encoder>
+      <charset>UTF-8</charset>
+      <pattern>${LOG_PATTERN}</pattern>
+    </encoder>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%i.log</fileNamePattern>
+      <minIndex>1</minIndex>
+      <maxIndex>10</maxIndex>
+    </rollingPolicy>
+
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <maxFileSize>10MB</maxFileSize>
+    </triggeringPolicy>
+  </appender>
+
+  <!-- LOGGERS -->
+  <springProfile name="production">
+    <logger name="vn.stp" level="INFO" additivity="false">
+      <appender-ref ref="FILE"/>
+    </logger>
+    <logger name="org.springframework" level="INFO" additivity="false">
+      <appender-ref ref="FILE"/>
+    </logger>
+    <logger name="org.springframework.web.servlet" level="INFO" additivity="false">
+      <appender-ref ref="FILE"/>
+    </logger>
+    <logger name="org.springframework.security" level="INFO" additivity="false">
+      <appender-ref ref="FILE"/>
+    </logger>
+    <logger name="org.thymeleaf" level="INFO" additivity="false">
+      <appender-ref ref="FILE"/>
+    </logger>
+    <logger name="org.springframework.data.jpa" level="INFO" additivity="false">
+      <appender-ref ref="FILE"/>
+    </logger>
+  </springProfile>
+
+  <springProfile name="development">
+    <logger name="vn.stp" level="DEBUG" additivity="false">
+      <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="org.springframework" level="INFO" additivity="false">
+      <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="org.springframework.web.servlet" level="TRACE" additivity="false">
+      <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="org.springframework.security" level="DEBUG" additivity="false">
+      <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="org.thymeleaf" level="INFO" additivity="false">
+      <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="org.springframework.data.jpa" level="INFO" additivity="false">
+      <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+      <appender-ref ref="STDOUT"/>
+    </logger>
+    <!--<logger name="org.hibernate.type" level="TRACE" additivity="false">-->
+      <!--<appender-ref ref="STDOUT"/>-->
+    <!--</logger>-->
+  </springProfile>
+
+  <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+  <!-- ROOT -->
+  <root level="INFO">
+
+    <springProfile name="production">
+      <appender-ref ref="FILE"/>
+    </springProfile>
+
+    <springProfile name="development">
+      <appender-ref ref="STDOUT"/>
+    </springProfile>
+
+  </root>
+</configuration>

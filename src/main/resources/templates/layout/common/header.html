@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+
+<body>
+<header th:fragment="common-header" role="banner" class="header flex-container">
+  <nav class="navbar navbar-expand-md navbar-light bg-light">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <a class="navbar-brand" th:href="@{/}">
+      <span class="d-none d-sm-block">Standard Photos</span>
+    </a>
+    <button id="headerMenuToggleForMobile" type="button" class="navbar-toggler"
+            data-toggle="collapse">
+      <i class="fas fa-bars"></i>
+    </button>
+    <!-- navbar-header-->
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a id="headerMenuToggleForDesktop" class="nav-link" href="#"><i
+              class="fas fa-bars"></i></a>
+        </li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li role="presentation" class="dropdown info-number-container">
+          <div class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+            <i class="far fa-bell icon"></i>
+            <span class="badge badge-danger rounded-circle header-notify-count d-none">0</span>
+          </div>
+          <div class="dropdown-menu dropdown-menu-right">
+            <ul class="list-group list-group-flush" style="width: 20rem;">
+              <li id="header-notify-head" class="list-group-item text-center">
+                <i class="far fa-bell icon mr-2"></i>
+                <span>You got <strong class="header-notify-count">0</strong> news</span>
+              </li>
+              <li class="list-group-item p-0">
+                <ul id="header-notify-body" class="list-group" style="font-size: 14px;">
+
+                  <li id="header-notify-template-item" class="list-group-item p-2 d-none" data-timestamp="0">
+                    <a href="#" class="task-item text-body d-flex">
+                      <div class="pr-2 header-notify-img">
+                        <img th:src="@{/images/img.jpg}" class="rounded-circle" alt="">
+                      </div>
+                      <div class="peer flex-grow-1">
+                        <div class="header-notify-comment"><span>Administrator</span> assign to you <span
+                            class="text-info">Job 3</span></div>
+                        <div class="text-right font-italic">
+                          <small class="header-notify-timestamp stp-moment-date" data-timestamp="0">1 minute ago</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+
+                </ul>
+              </li>
+              <li id="header-notify-foot" class="list-group-item"><a th:href="@{/job}">View all my tasks >></a></li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="dropdown">
+          <div class="user-profile dropdown-toggle" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+            <img th:src="@{__${session.CURRENT_USER?.photoUrl ?: '/images/user.jpg'}__}"
+                 class="rounded-circle" alt="">
+            <span th:text="${session.CURRENT_USER?.fullName}">Administrator</span>
+          </div>
+          <div class="dropdown-menu dropdown-menu-right profile-menu"
+               aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" th:href="@{/user/profile}"><i
+                class="fas fa-user-circle text-primary mr-3"></i><span>Profile</span></a>
+            <a class="dropdown-item" th:href="@{/changePassword}"><i
+                class="fas fa-key text-info mr-3"></i><span>Change password</span></a>
+            <div class="dropdown-divider"></div>
+            <a id="logout" class="dropdown-item" href="#" th:href="@{/logout}">
+              <i class="fas fa-sign-out-alt mr-3"></i><span
+                th:text="#{common.logout}">Sign out</span></a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+</body>
+
+</html>

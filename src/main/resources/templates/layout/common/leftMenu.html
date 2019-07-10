@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<body>
+<div id="sidebar-wrapper" th:fragment="common-left-menu">
+  <ul class="sidebar-nav nav nav-pills">
+    <li th:replace="layout/components::stp-nav-item(action='/',label='Dashboard',iconClass='fa-tachometer-alt')"></li>
+    <li th:replace="layout/components::stp-nav-item(action='/order',label='Orders',iconClass='fa-file-invoice-dollar')"
+        sec:authorize="hasAnyRole('ADMINISTRATOR', 'SALE')"></li>
+    <li th:replace="layout/components::stp-nav-item(action='/job/init',label='Jobs',iconClass='fa-tasks')"
+        sec:authorize="hasAnyRole('ADMINISTRATOR','SALE','LEADER','USER','QC')"></li>
+    <li th:replace="layout/components::stp-nav-item(action='/timeSheet',label='Timesheet',iconClass='fa-calendar-alt')"
+        sec:authorize="hasAnyRole('ADMINISTRATOR','SALE','LEADER')"></li>
+    <li th:replace="layout/components::stp-nav-item(action='/salary',label='Salary',iconClass='fa-hand-holding-usd')"
+        sec:authorize="hasAnyRole('ADMINISTRATOR','SALE','LEADER','USER','QC')"></li>
+    <li th:replace="layout/components::stp-nav-item(action='/invoice',label='Invoice',iconClass='fa-receipt')"
+        sec:authorize="hasAnyRole('ADMINISTRATOR', 'SALE')"></li>
+
+    <li class="nav-item" sec:authorize="hasAnyRole('ADMINISTRATOR', 'SALE')">
+      <a class="nav-link nav-sub-menu" href="#">
+        <i class="fas fa-cogs"></i>
+        <span>Admin pages</span>
+      </a>
+      <ul class="nav-stacked nav-pills">
+        <li th:replace="layout/components::stp-nav-item(action='/price',label='Price list')"
+            sec:authorize="hasAnyRole('ADMINISTRATOR')"></li>
+        <li th:replace="layout/components::stp-nav-item(action='/customer',label='Customer')"
+            sec:authorize="hasAnyRole('ADMINISTRATOR', 'SALE')"></li>
+        <li th:replace="layout/components::stp-nav-item(action='/department',label='Department')"
+            sec:authorize="hasAnyRole('ADMINISTRATOR')"></li>
+        <li th:replace="layout/components::stp-nav-item(action='/user',label='User')"
+            sec:authorize="hasAnyRole('ADMINISTRATOR')"></li>
+        <li th:replace="layout/components::stp-nav-item(action='/productType',label='Product types')"
+            sec:authorize="hasAnyRole('ADMINISTRATOR')"></li>
+        <li th:replace="layout/components::stp-nav-item(action='/productLevel',label='Product levels')"
+            sec:authorize="hasAnyRole('ADMINISTRATOR')"></li>
+        <li th:replace="layout/components::stp-nav-item(action='/news',label='News')"
+            sec:authorize="hasAnyRole('ADMINISTRATOR')"></li>
+      </ul>
+    </li>
+  </ul>
+
+  <script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    $('#headerMenuToggleForMobile').on('click', function (e) {
+      e.preventDefault();
+      $('body').removeClass('mini-desktop').toggleClass('toggled-mobile');
+    });
+    $('#headerMenuToggleForDesktop').on('click', function (e) {
+      e.preventDefault();
+      $('body').removeClass('toggled-mobile').toggleClass('mini-desktop');
+      $('#menu ul').hide();
+
+      STP.sendRequest({
+        data: JSON.stringify({bodyClass: $('body').attr('class')}),
+        url: /*[[@{'/update-customizable'}]]*/'',
+        success: function () {
+        }
+      });
+    });
+
+    $(function () {
+      var leftMenu = $('#sidebar-wrapper').find('ul.sidebar-nav');
+      leftMenu.find('ul').hide();
+      leftMenu.find('ul .nav-link.active').closest('.nav-stacked').show()
+      .prev().removeClass('nav-sub-menu nav-sub-menu-show').addClass('nav-sub-menu-show');
+
+      leftMenu.find('li>a').on('click', function () {
+            var checkElement = $(this).next();
+            leftMenu.find('li>a').removeClass('active');
+            $(this).addClass('active');
+
+            if (checkElement.is('ul')) {
+              if (checkElement.is(':visible')) {
+                checkElement.slideUp('normal');
+                $(this).removeClass('nav-sub-menu nav-sub-menu-show').addClass('nav-sub-menu');
+              } else {
+                leftMenu.find('ul:visible').slideUp('normal');
+                checkElement.slideDown('normal');
+                $(this).removeClass('nav-sub-menu nav-sub-menu-show').addClass('nav-sub-menu-show');
+              }
+
+              return false;
+            }
+          }
+      );
+    })
+    /*]]>*/
+  </script>
+</div>
+</body>
+
+</html>

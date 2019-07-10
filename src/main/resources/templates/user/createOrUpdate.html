@@ -1,0 +1,150 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/normal}">
+
+<th:block layout:fragment="content">
+  <form th:object="${user}" th:action="@{/user/save}" method="post">
+    <div class="createScreenTitle">
+      <p th:unless="${user.id}" th:text="#{user.createScreen}">Create</p>
+      <p th:if="${user.id}" th:text="#{user.editScreen}">Update</p>
+    </div>
+    <div class="form-group row required">
+      <label for="userName"
+             class="col-sm-3 control-label"
+             th:text="#{user.columns.userName}">nameeee</label>
+      <div class="col-sm-3">
+        <input type="hidden" th:field="*{id}">
+        <input type="text"
+               class="form-control" th:classappend="${#fields.hasErrors('userName') ? 'is-invalid' : ''}"
+               id="userName"
+               th:maxlength="${T(vn.stp.common.ColumnLengths).USER_NAME}"
+               th:field="*{userName}"
+               th:errorclass="is-invalid">
+        <span class="invalid-feedback"
+              th:if="${#fields.hasErrors('userName')}"
+              th:errors="*{userName}"></span>
+      </div>
+    </div>
+
+    <div class="form-group row required">
+      <label for="fullName"
+             class="col-sm-3 control-label"
+             th:text="#{user.columns.fullName}">nameeee</label>
+      <div class="col-sm-3">
+        <input type="text"
+               class="form-control" th:classappend="${#fields.hasErrors('fullName') ? 'is-invalid' : ''}"
+               id="fullName"
+               th:maxlength="${T(vn.stp.common.ColumnLengths).USER_FULL_NAME}"
+               th:field="*{fullName}"
+               th:errorclass="is-invalid">
+        <span class="invalid-feedback"
+              th:if="${#fields.hasErrors('fullName')}"
+              th:errors="*{fullName}"></span>
+      </div>
+    </div>
+
+    <div class="form-group row required">
+      <label for="email"
+             class="col-sm-3 control-label"
+             th:text="#{user.columns.email}">nameeee</label>
+      <div class="col-sm-3">
+        <input type="text"
+               class="form-control" th:classappend="${#fields.hasErrors('email') ? 'is-invalid' : ''}"
+               id="email"
+               th:maxlength="${T(vn.stp.common.ColumnLengths).EMAIL}"
+               th:field="*{email}"
+               th:errorclass="is-invalid">
+        <span class="invalid-feedback"
+              th:if="${#fields.hasErrors('email')}"
+              th:errors="*{email}"></span>
+      </div>
+    </div>
+
+    <!--<div class="form-group row">-->
+      <!--<label for="photoUrl"-->
+             <!--class="col-sm-3 control-label"-->
+             <!--th:text="#{user.columns.photoUrl}">nameeee</label>-->
+      <!--<div class="col-sm-9">-->
+        <!--<input type="text"-->
+               <!--class="form-control" th:classappend="${#fields.hasErrors('photoUrl') ? 'is-invalid' : ''}"-->
+               <!--id="photoUrl"-->
+               <!--th:maxlength="${T(vn.stp.common.ColumnLengths).PHOTO_URL}"-->
+               <!--th:field="*{photoUrl}"-->
+               <!--th:errorclass="is-invalid">-->
+        <!--<span class="invalid-feedback"-->
+              <!--th:if="${#fields.hasErrors('photoUrl')}"-->
+              <!--th:errors="*{photoUrl}"></span>-->
+      <!--</div>-->
+    <!--</div>-->
+
+    <div class="form-group row required">
+      <label for="departmentId"
+             class="col-sm-3 control-label"
+             th:text="#{user.columns.department}">department</label>
+      <div class="col-sm-3">
+        <select id="departmentId"
+                class="form-control" th:classappend="${#fields.hasErrors('departmentId') ? 'is-invalid' : ''}"
+                th:field="*{departmentId}" th:errorclass="is-invalid">
+          <option value=""></option>
+          <option th:each="department : ${departments}"
+                  th:value="${department.id}"
+                  th:selected="${departmentid == user.departmentId}"
+                  th:text="${department.name}">Sale
+          </option>
+        </select>
+        <span class="invalid-feedback"
+              th:if="${#fields.hasErrors('departmentId')}"
+              th:errors="*{departmentId}"></span>
+      </div>
+    </div>
+
+    <div class="form-group row required">
+      <label class="col-sm-3 control-label"
+             th:text="#{user.columns.status}">nameeee</label>
+      <div class="col-sm-9">
+        <div class="custom-control custom-radio custom-control-inline"
+             th:each="status : ${T(vn.stp.common.enums.UserStatus).values()}">
+          <input type="radio"
+                 class="custom-control-input" th:classappend="${#fields.hasErrors('userStatus') ? 'is-invalid' : ''}"
+                 th:field="*{userStatus}"
+                 th:value="${status}">
+          <label th:for="${#ids.prev('userStatus')}"
+                 class="custom-control-label"
+                 th:text="#{|common.enums.UserStatus.${status}|}">Active</label>
+        </div>
+        <div class="invalid-feedback"
+             th:if="${#fields.hasErrors('userStatus')}"
+             th:errors="*{userStatus}"></div>
+      </div>
+    </div>
+
+    <div class="form-group row required">
+      <!-- Authority -->
+      <label class="col-sm-3 control-label"
+             th:text="#{user.columns.role}">order status</label>
+      <div class="col-sm-9">
+        <div class="custom-control custom-control-inline custom-checkbox"
+             th:each="role : ${roles}">
+          <input type="checkbox"
+                 class="custom-control-input" th:classappend="${#fields.hasErrors('authorityIds') ? 'is-invalid' : ''}"
+                 th:field="*{authorityIds}"
+                 th:value="${role.id}">
+          <label th:for="${#ids.prev('authorityIds')}"
+                 class="custom-control-label"
+                 th:text="#{|common.enums.UserRole.${role.name}|}">Administrator</label>
+        </div>
+        <div class="custom-control-input" th:classappend="${#fields.hasErrors('authorityIds') ? 'is-invalid' : ''}"></div>
+        <div class="invalid-feedback"
+             th:if="${#fields.hasErrors('authorityIds')}"
+             th:errors="*{authorityIds}"></div>
+      </div>
+    </div>
+    <div class="text-right">
+      <button type="submit" class="btn btn-primary" th:text="#{common.save}">Save</button>
+      <a class="btn btn-primary" th:href="@{/user/close}" th:text="#{common.close}">close</a>
+    </div>
+  </form>
+</th:block>
+</html>

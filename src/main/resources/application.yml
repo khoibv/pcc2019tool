@@ -1,0 +1,156 @@
+spring:
+  application:
+    name: salary
+  profiles:
+    active: development
+  #      active: production
+  jackson:
+    date-format: "yyyy/MM/dd"
+  thymeleaf:
+    prefix: classpath:/templates/
+  servlet:
+    multipart:
+      enabled: true
+      # Threshold after which files will be written to disk.
+      file-size-threshold: 0
+      max-file-size: 10MB
+      max-request-size: 20MB
+  #      location:
+  #      resolve-lazily: true
+  transaction:
+    # Default transaction timeout in seconds.
+    default-timeout: 3600
+    # Perform the rollback on commit failures.
+    rollback-on-commit-failure: true
+  main:
+    allow-bean-definition-overriding: true
+
+server:
+  port: 88
+  servlet:
+    context-path: /salary
+    session:
+      cookie:
+        http-only: true
+
+---
+# Configuration for development env
+spring:
+  profiles: development
+  datasource:
+    url: jdbc:mysql://localhost:3306/stp_salary?useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+    username: stp_salary
+    password: stp_salary
+    initialization-mode: always
+  thymeleaf:
+    cache: false
+  jpa:
+    hibernate:
+      #      ddl-auto: create
+      ddl-auto: update
+    generate-ddl: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        ejb.interceptor.session_scoped: vn.stp.common.config.AuditLog
+#        ejb.interceptor: vn.stp.common.config.AuditLog
+    open-in-view: true
+  main:
+    allow-bean-definition-overriding: true
+  resources:
+    # Static resources reloading during development
+    static-locations: classpath:/resources/static
+    cache:
+      period: 0
+  mail:
+    host: localhost
+    port: 2500
+    username:
+    password:
+    properties:
+    - mail.smtp.auth: true
+    - mail.smtp.starttls.enable: true
+
+application:
+  base-url: http://localhost:88/salary
+  mail:
+    from: stpvn.adm@gmail.com
+  path:
+    upload: /Users/khoibv/tmp/stp/upload
+    download: /Users/khoibv/tmp/stp/download
+    avatar: /Users/khoibv/tmp/stp/avatar
+  cors:
+    allowed-origins: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    exposed-headers: "Authorization,Link,X-Total-Count"
+    allow-credentials: true
+    max-age: 1800
+  websocket:
+    # Enable/Disable websocket
+    enable: true
+    endpoint: /ws/stp
+    broker: /topic
+  chatbot:
+    # Enable/Disable chatbot
+    enable: false
+    user: c3Rwdm4uZGV2QGdtYWlsLmNvbQ==
+    password: OHdIUkxSV3pFZ1AyNXJZ
+    group: STP - Notification
+#    group: aaaa
+
+
+---
+# Configuration for production env
+spring:
+  profiles: production
+  datasource:
+    url: jdbc:mysql://localhost:3306/stp_salary?useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Ho_Chi_Minh&useSSL=true&requireSSL=false
+    username: stp_salary
+    password: stp_salary
+    initialization-mode: never
+  thymeleaf:
+    cache: true
+  jpa:
+    show-sql: true
+    open-in-view: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: stpvn.adm@gmail.com
+    password: THwStuBdBU6T4P2
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+    protocol: smtp
+
+application:
+  base-url: http://35.187.244.67:8080/salary # Modify according to your server's URL
+  mail:
+    from: stpvn.adm@gmail.com
+  path:
+    upload: /var/stp/files/upload
+    download: /var/stp/files/download
+    avatar: /var/stp/files/avatar
+  cors:
+    allowed-origins: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    exposed-headers: "Authorization,Link,X-Total-Count"
+    allow-credentials: true
+    max-age: 1800
+  websocket:
+    # Enable/Disable websocket
+    enable: true
+    endpoint: /ws/stp
+    broker: /topic
+  chatbot:
+    # Enable/Disable chatbot
+    enable: false
+    user: c3Rwdm4uYWRtQGdtYWlsLmNvbQ== # Modify according to official Skype user
+    password: OHdIUkxSV3pFZ1AyNXJZ # Modify according to official Skype password
+    group: STP - Notification # Modify according to official Skype group

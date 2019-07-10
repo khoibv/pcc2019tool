@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns="http://www.w3.org/1999/xhtml">
+
+  <body>
+    <!--/*
+        nav item.
+
+        $action         required    action string
+        $label          required    label string
+        $iconClass      option      default value 'fa-check-square'
+      */-->
+    <th:block th:fragment="stp-nav-item(action)">
+      <th:block
+          th:with="iconClass = ${iconClass?:'fa-check-square'}, actionCurrent = ${#request.getServletPath()}">
+        <li class="nav-item">
+          <a
+              class="nav-link"
+              th:classappend="${(#strings.length(action) > 1) and #strings.startsWith(actionCurrent, action) or #strings.equals(actionCurrent, action)}? 'active'"
+              th:href="@{__${action}__}">
+            <i th:class="|fas ${iconClass}|"></i>
+            <span th:text="${label}">menu item name</span>
+          </a>
+        </li>
+      </th:block>
+    </th:block>
+
+    <!--/*
+        Show validation errors in row of a table
+
+        fieldName         required    Error of `fieldName`
+      */-->
+    <ul
+        class="invalid-feedback"
+        th:fragment="stp-show-error(fieldName)">
+      <li
+          th:each="err : ${#fields.errors(fieldName)}"
+          th:text="${err}"></li>
+    </ul>
+
+    <!--/*
+        Job in-charge form-group
+
+        $userId        required    User ID
+      */-->
+    <th:block th:fragment="stp-form-group-in-change(userId)">
+      <th:block th:with="itemId=${itemId?:'job-in-charge-select'}">
+        <div
+            class="form-group"
+            th:with="disabled=${disabled?:false}">
+          <label
+              th:for="${itemId}"
+              th:text="#{job.in-charge}">ASSIGNEE
+          </label>
+          <select
+              th:id="${itemId}"
+              class="form-control stp-select-user"
+              th:unless="${disabled}">
+            <option
+                value=""
+                th:selected="userId == null">Unassigned
+            </option>
+            <option
+                th:each="user : ${@jobSession.users}"
+                th:value="${user.id}"
+                th:text="${user.fullName}"
+                th:data-user-name="${user.userName}"
+                th:selected="${userId==user.id}">LongNP
+            </option>
+          </select>
+          <label
+              class="form-control"
+              th:if="${disabled}">
+            <span
+                th:each="user : ${@jobSession.users}"
+                th:text="${user.fullName}"
+                th:data-id="${user.id}"
+                th:if="${userId==user.id}">LongNP
+            </span>
+          </label>
+        </div>
+        <script
+            type="text/javascript"
+            th:inline="javascript">
+          /*<![CDATA[*/
+          $(function () {
+            var id = /*[[${itemId}]]*/ '';
+            if (id) {
+              $('#' + id).select2({
+                // dropdownParent: $('.mCSB_container'),
+                matcher: function (params, data) {
+                  if ($.trim(params.term) === '') {
+                    return data;
+                  }
+
+                  if (typeof data.text === 'undefined' || typeof data.id === 'undefined'
+                      || typeof $(data.element).data('userName')
+                      === 'undefined') {
+                    return null;
+                  }
+
+                  var term = params.term.toUpperCase();
+                  if ((data.text.toUpperCase().indexOf(term) > -1)
+                      || (data.id.toUpperCase().indexOf(term) > -1)
+                      || ($(data.element).data('userName').toUpperCase().indexOf(term)
+                          > -1)) {
+                    return data;
+                  }
+                  return null;
+                }
+              });
+            }
+          })
+          /*]]>*/
+        </script>
+      </th:block>
+    </th:block>
+
+    <!--/*
+        Job status form-group
+
+        $jobStatus        required    Job status enum
+      */-->
+    <th:block th:fragment="stp-form-group-status(jobStatus)">
+      <div
+          class="form-group"
+          th:with="disabled=${disabled?:false}">
+        <label
+            for="job-stauts-select"
+            th:text="#{job.status}">Status
+        </label>
+        <select
+            id="job-stauts-select"
+            class="form-control"
+            th:unless="${disabled}">
+          <option
+              th:each="status : ${T(vn.stp.common.enums.JobStatus).statusForView()}"
+              th:selected="${status==jobStatus}"
+              th:value="${status}"
+              th:text="${status}">Init
+          </option>
+        </select>
+        <label
+            class="form-control"
+            th:if="${disabled}">
+          <span
+              th:each="status : ${T(vn.stp.common.enums.JobStatus).statusForView()}"
+              th:if="${status==jobStatus}"
+              th:text="${status}">Init
+          </span>
+        </label>
+      </div>
+    </th:block>
+
+    <!--/*
+        make icon
+
+        $url        required    url
+        $tooltip    option      tooltip
+      */-->
+    <th:block th:fragment="stp-icon(url)">
+      <span th:with="tooltip=${tooltip?:''}">
+        <i
+            th:if="${!#strings.isEmpty(tooltip)}"
+            class="img"
+            data-toggle="tooltip"
+            th:title="${tooltip}"
+            th:style="|background-image:url(@{__${#strings.defaultString(url,'/images/user.png')}__})|"></i>
+        <i
+            th:if="${#strings.isEmpty(tooltip)}"
+            class="img"
+            th:style="|background-image:url(@{__${#strings.defaultString(url,'/images/user.png')}__})|"></i>
+      </span>
+    </th:block>
+
+
+    <!--/*
+        Create component allow upload image from local PC, and support crop before upload
+
+        $uploadUrl      required        URL to upload. E.g: @{/user/profile/uploadAvatar}
+        $avatarUrl      required        URL to get uploaded avatar. E.g: @{/avatar}
+        $title          not-required    Title of component (tooltip). E.g: Change your image
+        $oldAvatarUrl   not-required    Old avatar. If not specify, display a rectangle
+        $acceptType     not-required    Which type of file allow to upload. Default is `image/*`
+        $success        not-required    Success javascript callback function name. E.g: processAfterFileUploaded
+    */-->
+    <th:block th:fragment="stp-img-crop-upload(uploadUrl, avatarUrl, title, oldAvatarUrl, acceptType)">
+      <link
+          th:href="@{/css/cropper/cropper.min.css}"
+          rel="stylesheet">
+      <div class="stp-img-upload">
+        <label
+            class="label"
+            data-toggle="tooltip"
+            th:title="${title}?:'Change your image'">
+          <div class="media">
+            <img
+                class="rounded avatar img-thumbnail"
+                th:src="${oldAvatarUrl}"
+                alt="avatar"
+                th:if="${oldAvatarUrl != null}">
+            <img
+                class="rounded avatar img-thumbnail"
+                th:src="@{/images/user.png}"
+                alt="avatar"
+                th:if="${oldAvatarUrl == null}">
+            <input
+                type="file"
+                class="sr-only img-upload-file"
+                name="image"
+                accept="image/*"
+                th:accept="${acceptType}?:'image/*'">
+          </div>
+        </label>
+        <div class="progress d-none">
+          <div
+              class="progress-bar progress-bar-striped progress-bar-animated"
+              role="progressbar"
+              aria-valuenow="0"
+              aria-valuemin="0"
+              aria-valuemax="100">0%
+          </div>
+        </div>
+        <div
+            class="alert"
+            role="alert"></div>
+        <div
+            class="modal fade img-upload-modal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="img-upload-modal-label"
+            aria-hidden="true">
+          <div
+              class="modal-dialog"
+              role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5
+                    class="modal-title"
+                    id="img-upload-modal-label">Crop the image
+                </h5>
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="img-container">
+                  <img
+                      id="img-upload-image"
+                      src="">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-default"
+                    data-dismiss="modal">Cancel
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-primary crop">Crop
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script th:src="@{/js/cropper/cropper.min.js}"></script>
+      <script th:src="@{/js/image-crop-upload.js}"></script>
+      <script
+          type="text/javascript"
+          th:inline="javascript">
+        $(function () {
+          var imageCropUpload = new STPImageUpload({
+            container: $('.stp-img-upload'),
+            uploadUrl: /*[[${uploadUrl}]]*/ null,
+            avatarUrl: /*[[${avatarUrl}]]*/ null,
+            success: /*[(${success})]*/null
+          });
+          imageCropUpload.init();
+        });
+      </script>
+    </th:block><!--/* end of fragment stp-img-crop-upload */-->
+
+
+    <!--/*
+        Create component send/receive notification using websocket
+    */-->
+    <th:block th:fragment="stp-notify-websocket">
+
+      <link
+          th:href="@{/css/notify/noty.css}"
+          rel="stylesheet">
+      <link
+          th:href="@{/css/notify/themes/mint.css}"
+          rel="stylesheet">
+      <script th:src="@{/js/moment/moment.min.js}"></script>
+      <script th:src="@{/js/notify/noty.min.js}"></script>
+      <script th:src="@{/js/ws/sockjs.min.js}"></script>
+      <script th:src="@{/js/ws/stomp.min.js}"></script>
+      <script th:src="@{/js/notify-ws.js}"></script>
+      <script th:src="@{/js/notify-ws-stp.js}"></script>
+      <script
+          type="text/javascript"
+          th:inline="javascript">
+        $.extend(true, STP, {
+          urls: {
+            ws: {
+              endpoint: /*[[@{${@environment.getProperty('application.websocket.endpoint', '/ws/stp')}}]]*/'/salary/ws/stp',
+              topic: /*[[${'/user' + @environment.getProperty('application.websocket.broker', '/topic') + '/notify'}]]*/'/user/topic/notify',
+              actionLink: /*[[@{/job/detail}]]*/'/salary/job/detail',
+            }
+          }
+        });
+
+        $(function () {
+          var websocket = new STPWebSocket({
+            urls: {
+              app: STP.urls.app,
+              endpoint: STP.urls.ws.endpoint,
+              topic: STP.urls.ws.topic,
+              actionLink: STP.urls.ws.actionLink
+            },
+            onShow: STP.Notify.addNewNotify,
+            onClose: STP.Notify.removeNotify
+          });
+          websocket.init();
+        });
+      </script>
+
+    </th:block>
+
+  </body>
+</html>
