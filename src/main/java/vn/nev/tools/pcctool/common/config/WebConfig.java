@@ -50,6 +50,7 @@ public class WebConfig implements WebMvcConfigurer {
     // Distribution locations
     registry.addResourceHandler("/dist/**")
         .addResourceLocations("classpath:/static/dist/");
+    System.out.println("********************************************** INIT RESOURCE HANDLERS ***************************");
   }
 
   @Override

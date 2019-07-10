@@ -5,17 +5,13 @@
 
 <head>
   <th:block th:include="layout/common/head :: common-head"></th:block>
-  <title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE">STP</title>
+  <title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE">Nissho Electronics Viewnam</title>
+  <th:block layout:fragment="stylesheet"></th:block>
 </head>
-
-<body th:class="${session.CURRENT_USER?.customizable?.bodyClass?:''}">
-<div layout:fragment="stylesheet"></div>
+<body>
 <div th:replace="layout/common/header :: common-header"></div>
 
 <div id="wrapper">
-  <!-- Sidebar -->
-  <div th:replace="layout/common/leftMenu :: common-left-menu"></div>
-  <!-- Page Content -->
   <div id="page-content-wrapper">
     <div class="stp-main-content">
       <div layout:fragment="content"></div>
@@ -23,19 +19,7 @@
   </div>
 </div>
 <div id="stp-loader"></div>
-<script th:src="@{/js/common.js}"></script>
-<script
-    type="text/javascript"
-    th:inline="javascript">
-  $.extend(true, STP, {
-    urls: {
-      app: /*[[${#strings.substring('__@{/}__', 0, #strings.length('__@{/}__') - 1)}]]*/'/salary',
-      logout: /*[[@{/logout}]]*/'/salary/logout'
-    }
-  });
-</script>
-<th:block th:insert="~{layout/components :: stp-notify-websocket}"
-          th:if="${@environment.getProperty('application.websocket.enable') == 'true' and (#strings.toString(param.wsFlg) != '0')}"/>
+<!--<script th:src="@{/js/common.js}"></script>-->
 <div layout:fragment="script"></div>
 </body>
 </html>
