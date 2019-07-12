@@ -5,12 +5,21 @@ $(function() {
 
     var keycode = (event.keyCode ? event.keyCode : event.which);
     	if(keycode === 13){
-    		NE.conversion.addColumn(that);
+    		NE.Conversion.addColumn(that);
     	}
   });
 
-  $('.btn-conversion').click(function() {
+  $('.btn-conversion').click(NE.Conversion.convert);
+});
 
+NE.Conversion = {
+  addColumn: function(control) {
+    var target = '#' + $(control).data('target');
+    $(target).append('<li>' + $(control).val() + '</li>');
+    $(control).val('');
+  },
+
+  convert: function() {
     var selectColumns = [];
     $('#outParamList li').each(function(index, item) {
       selectColumns.push({
@@ -35,17 +44,10 @@ $(function() {
         author: $('#author').val(),
       }),
       url: NE.urls.convert,
-      success: function(data) {
-        alert('Success: ' + data);
+      success: function(downloadId) {
+        // Download
+        window.location.href = NE.urls.download + '?downloadId=' + downloadId;
       }
     });
-  });
-});
-
-NE.conversion = {
-  addColumn: function(control) {
-    var target = '#' + $(control).data('target');
-    $(target).append('<li>' + $(control).val() + '</li>');
-    $(control).val('');
   }
 }

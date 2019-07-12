@@ -7,44 +7,83 @@
 </head>
 <th:block layout:fragment="content">
 
-  <div class="form-group">
-    <input type="text" id="serviceId" placeholder="Service ID, e.g ACJ_D011_005_01" value="ACJ_D999_999_99">
-    <input type="text" id="author" placeholder="author, e.g khoibv" value="khoibv">
+  <div class="card">
+    <div class="card-header">
+      Common information
+    </div>
+    <div class="card-body">
+      <div class="form-group row">
+        <label for="serviceId"
+               class="col-sm-2 col-form-label col-form-label-sm text-right"
+               th:text="#{conversion.serviceId}">Service ID</label>
+        <div class="col-sm-4">
+          <input type="text"
+                 id="serviceId"
+                 class="form-control form-control-sm"
+                 placeholder="Service ID, e.g ACJ_D011_005_01"
+                 value="ACJ_D999_999_99">
+        </div>
+
+        <label for="author"
+               class="col-sm-2 col-form-label col-form-label-sm text-right"
+               th:text="#{conversion.author}">Author</label>
+        <div class="col-sm-4">
+          <input type="text"
+                 id="author"
+                 class="form-control form-control-sm"
+                 placeholder="author, e.g khoibv"
+                 value="khoibv">
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="form-group row required">
-    <div class="text-right">
-      <button type="submit" class="btn btn-primary btn-conversion" th:text="#{common.convert}">
-        Save
-      </button>
+  <div class="py-4">
+    <button type="submit" class="btn btn-primary btn-conversion" th:text="#{common.convert}">
+      Save
+    </button>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-sm-6">
+
+      <div class="card">
+        <div class="card-header">
+          <div class="input-group">
+            <input type="text"
+                   id="outParam"
+                   class="form-control inputColumns"
+                   th:placeholder="#{conversion.outParam}"
+                   data-target="outParamList"/>
+            <div class="input-group-append">
+              <button type="button" class="btn btn-info">Add</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <ol id="outParamList"></ol>
+        </div>
+      </div>
     </div>
 
     <div class="col-sm-6">
-      <div class="input-group">
-        <input type="text"
-               id="outParam"
-               class="inputColumns"
-               th:placeholder="#{conversion.outParam}"
-               data-target="outParamList"/>
-        <div class="input-group-append">
-          <button type="button" class="btn btn-info">Add</button>
+      <div class="card">
+        <div class="card-header">
+          <div class="input-group">
+            <input type="text"
+                   id="inParam"
+                   class="form-control inputColumns"
+                   th:placeholder="#{conversion.inParam}"
+                   data-target="inParamList"/>
+            <div class="input-group-append">
+              <button type="button" class="btn btn-info">Add</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <ol id="inParamList"></ol>
         </div>
       </div>
-      <ul id="outParamList"></ul>
-    </div>
-
-    <div class="col-sm-6">
-      <div class="input-group">
-        <input type="text"
-               id="inParam"
-               class="inputColumns"
-               th:placeholder="#{conversion.inParam}"
-               data-target="inParamList"/>
-        <div class="input-group-append">
-          <button type="button" class="btn btn-info">Add</button>
-        </div>
-      </div>
-      <ul id="inParamList"></ul>
     </div>
   </div>
 </th:block>
@@ -55,6 +94,7 @@
     $.extend(true, NE, {
       urls: {
         convert: /*[[@{/convert}]]*/ null,
+        download: /*[[@{/download}]]*/ null,
       },
       messages: {
         confirmDelete: /*[[#{C0001}]]*/ 'Are you sure?',

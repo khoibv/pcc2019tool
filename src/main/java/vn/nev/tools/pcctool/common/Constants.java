@@ -43,6 +43,7 @@ public class Constants {
 
     public static final String YYYYMMDD = "yyyyMMdd";
     public static final String YYYYMMDD_HHMM = "yyyyMMdd_HHmm";
+    public static final String YYYYMMDD_HHMMSS = "yyyyMMdd_HHmmss";
     public static final String YYYY_MM_DD = "yyyy/MM/dd";
     public static final String MM_YYYY = "MM/yyyy";
     public static final String YYYY_MM_DD_T_HH_MM_SS_SSS = "yyyy/MM/dd'T'HH:mm:ss.SSS";
@@ -62,8 +63,7 @@ public class Constants {
   public final class Session {
 
     public static final String CURRENT_USER = "CURRENT_USER";
-    public static final String INVOICE_FILE = "INVOICE_FILE";
-    public static final String TEMP_USER = "TEMP_USER";
+    public static final String DOWNLOAD_FILE = "DOWNLOAD_FILE";
 
     private Session() {
     }

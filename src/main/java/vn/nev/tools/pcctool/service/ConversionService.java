@@ -1,18 +1,27 @@
 package vn.nev.tools.pcctool.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import vn.nev.tools.pcctool.common.Constants;
+import vn.nev.tools.pcctool.common.exception.NEIOException;
 import vn.nev.tools.pcctool.dto.ColumnDto;
 import vn.nev.tools.pcctool.dto.ConversionRequestDto;
 import vn.nev.tools.pcctool.dto.ConversionResponseDto;
@@ -29,6 +38,10 @@ public class ConversionService extends BaseService implements IConversionService
   public ConversionResponseDto convert(ConversionRequestDto conversion) {
     ConversionResponseDto responseDto = new ConversionResponseDto();
 
+    responseDto.setServiceId(conversion.getServiceId());
+    responseDto.setDtoName(conversion.getDtoName());
+    responseDto.setAccessName(conversion.getAccessName());
+
     responseDto.setInBean(generateInBean(conversion));
     responseDto.setOutBean(generateOutBean(conversion));
     responseDto.setDto(generateDto(conversion));
@@ -36,13 +49,43 @@ public class ConversionService extends BaseService implements IConversionService
     responseDto.setService(generateService(conversion));
     responseDto.setDataAccess(generateDataAccess(conversion));
 
-    LOG.info("*******************Converted: " + responseDto);
+//    LOG.info("*******************Converted: " + responseDto);
 
     return responseDto;
   }
 
-  public void createZipFile(ConversionResponseDto conversion, String outputPath) {
+  @Override
+  public void createZipFile(ConversionResponseDto conversion, String outputFile) {
 
+    String path = "acc_ejb/ejbModule/jp/co/nissho_ele/acc/acj";
+    File file = new File(outputFile);
+
+    Map<String, String> fileContents = new HashMap<>();
+    fileContents.put("/bean/" + conversion.getServiceId() + "InBean.java", conversion.getInBean());
+    fileContents
+        .put("/bean/" + conversion.getServiceId() + "OutBean.java", conversion.getOutBean());
+    fileContents
+        .put("/entity/access/" + conversion.getAccessName() + ".java", conversion.getDataAccess());
+    fileContents.put("/entity/dto/" + conversion.getDtoName() + ".java", conversion.getDto());
+    fileContents
+        .put("/service/" + conversion.getServiceId() + "Service.java", conversion.getService());
+    fileContents.put("/service/" + conversion.getServiceId() + "ServiceRemote.java",
+        conversion.getServiceRemote());
+
+    try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(file))) {
+      for (Entry<String, String> entry : fileContents.entrySet()) {
+        String filePath = path + entry.getKey();
+        String content = entry.getValue();
+
+        ZipEntry zipFile = new ZipEntry(filePath);
+        out.putNextEntry(zipFile);
+        byte[] data = content.getBytes();
+        out.write(data, 0, data.length);
+        out.closeEntry();
+      }
+    } catch (IOException ioe) {
+      throw new NEIOException(ioe);
+    }
   }
 
   private String generateInBean(ConversionRequestDto conversion) {
