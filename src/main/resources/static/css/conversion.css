@@ -1,0 +1,7 @@
+.icon-button:hover {
+  cursor: pointer;
+}
+
+.column-actions i {
+  font-size: 20px;
+}

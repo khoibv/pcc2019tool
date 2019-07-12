@@ -5,10 +5,13 @@
 <head>
   <title>Home</title>
 </head>
+<th:block layout:fragment="stylesheet">
+  <link th:href="@{/css/conversion.css}" rel="stylesheet">
+</th:block>
 <th:block layout:fragment="content">
 
   <div class="card">
-    <div class="card-header">
+    <div class="card-header text-center">
       Common information
     </div>
     <div class="card-body">
@@ -35,11 +38,30 @@
                  value="khoibv">
         </div>
       </div>
+
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label col-form-label-sm text-right"
+               th:text="#{conversion.serviceType}">Service type</label>
+        <div class="col-sm-10">
+          <div class="custom-control custom-radio custom-control-inline form-control-sm"
+               th:each="serviceType : ${T(vn.nev.tools.pcctool.enums.ServiceType).values()}">
+            <input type="radio"
+                   th:id="${'serviceType' + serviceType}"
+                   class="custom-control-input custom-control-sm"
+                   name="serviceType"
+                   th:value="${serviceType}">
+            <label class="custom-control-label"
+                   th:for="${'serviceType' + serviceType}"
+                   th:text="#{|common.enums.ServiceType.${serviceType}|}">SELECT</label>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <div class="py-4">
-    <button type="submit" class="btn btn-primary btn-conversion" th:text="#{common.convert}">
+    <button type="submit" class="btn btn-success btn-conversion" th:text="#{common.convert}">
       Save
     </button>
   </div>
@@ -52,11 +74,11 @@
           <div class="input-group">
             <input type="text"
                    id="outParam"
-                   class="form-control inputColumns"
+                   class="form-control form-control-sm inputColumns"
                    th:placeholder="#{conversion.outParam}"
                    data-target="outParamList"/>
             <div class="input-group-append">
-              <button type="button" class="btn btn-info">Add</button>
+              <button type="button" class="btn btn-success btn-sm btn-add-column">Add</button>
             </div>
           </div>
         </div>
@@ -72,11 +94,11 @@
           <div class="input-group">
             <input type="text"
                    id="inParam"
-                   class="form-control inputColumns"
+                   class="form-control form-control-sm inputColumns"
                    th:placeholder="#{conversion.inParam}"
                    data-target="inParamList"/>
             <div class="input-group-append">
-              <button type="button" class="btn btn-info">Add</button>
+              <button type="button" class="btn btn-success btn-sm btn-add-column">Add</button>
             </div>
           </div>
         </div>
@@ -85,6 +107,29 @@
         </div>
       </div>
     </div>
+  </div>
+
+
+  <div class="d-none">
+    <!-- Template -->
+    <ol id="rowTemplate">
+      <li class="py-2 border-bottom">
+        <div class="d-flex flex-row justify-content-between">
+          <div class="columnName">ABC_DEF</div>
+          <div class="d-flex flex-row justify-content-between w-25 column-actions">
+            <a title="Up" class="text-primary up icon-button">
+              <i class="fas fa-arrow-up"></i>
+            </a>
+            <a title="Down" class="text-secondary down icon-button">
+              <i class="fas fa-arrow-down"></i>
+            </a>
+            <a th:title="#{common.delete}" class="text-danger delete-column icon-button">
+              <i class="fas fa-trash"></i>
+            </a>
+          </div>
+        </div>
+      </li>
+    </ol>
   </div>
 </th:block>
 
@@ -100,6 +145,9 @@
         confirmDelete: /*[[#{C0001}]]*/ 'Are you sure?',
       }
     });
+
+
+
 
 
   </script>

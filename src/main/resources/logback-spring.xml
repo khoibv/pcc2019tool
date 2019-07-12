@@ -5,12 +5,12 @@
 
 
   <springProfile name="production">
-    <property name="LOG_PATH" value="/var/stp/logs"/>
+    <property name="LOG_PATH" value="/var/nepcc/logs"/>
   </springProfile>
   <springProfile name="development">
     <property name="LOG_PATH" value="logs"/>
   </springProfile>
-  <property name="LOG_FILE_NAME" value="stp_salary"/>
+  <property name="LOG_FILE_NAME" value="nepcc_tool"/>
   <property name="LOG_PATTERN"
     value='%date{"yyyy-MM-dd HH:mm:ss,SSS"} [%thread] %-5level %logger - %msg%n'/>
   <property name="CONSOLE_PATTERN"
@@ -46,7 +46,7 @@
 
   <!-- LOGGERS -->
   <springProfile name="production">
-    <logger name="vn.stp" level="INFO" additivity="false">
+    <logger name="vn.nev.tools.pcctool" level="INFO" additivity="false">
       <appender-ref ref="FILE"/>
     </logger>
     <logger name="org.springframework" level="INFO" additivity="false">
@@ -67,7 +67,7 @@
   </springProfile>
 
   <springProfile name="development">
-    <logger name="vn.stp" level="DEBUG" additivity="false">
+    <logger name="vn.nev.tools.pcctool" level="DEBUG" additivity="false">
       <appender-ref ref="STDOUT"/>
     </logger>
     <logger name="org.springframework" level="INFO" additivity="false">

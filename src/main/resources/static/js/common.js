@@ -40,10 +40,10 @@ $(function () {
     var csrfToken = $("meta[name='_csrf']").attr('content');
     xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
   }).ajaxStart(function () {
-    $('#NE-loader').show();
+    $('#ne-loader').show();
     NProgress.start();
   }).ajaxStop(function () {
-    $('#NE-loader').hide();
+    $('#ne-loader').hide();
     NProgress.done();
   });
 
@@ -254,8 +254,8 @@ NE.Dialog = {
     }, settings);
     settings.title = settings.title || settings.dialogType.toUpperCase();
     var dialogContainer = $("<div/>").attr({
-      id: 'NE-dialog-' + new Date().getTime(),
-      'class': 'modal fade NE-modal-dialog',
+      id: 'ne-dialog-' + new Date().getTime(),
+      'class': 'modal fade ne-modal-dialog',
       'role': 'dialog'
     });
 
@@ -312,7 +312,7 @@ NE.Dialog = {
    * Hide a dialog
    */
   hide: function () {
-    $('div.NE-modal-dialog.modal[role=dialog]').empty();
+    $('div.ne-modal-dialog.modal[role=dialog]').empty();
     $('div.modal-backdrop').remove();
   },
 
@@ -343,7 +343,7 @@ NE.Dialog = {
         textColor = 'text-primary';
         break;
     }
-    dialogIcon = "NE-dialog-icon fas fa-" + dialogIcon + ' ' + textColor;
+    dialogIcon = "ne-dialog-icon fas fa-" + dialogIcon + ' ' + textColor;
 
     // Dialog header
     var header = $('<div class="modal-header" />').append(
@@ -353,7 +353,7 @@ NE.Dialog = {
     var body = $('<div class="modal-body" />')
     .append($('<div class="row"/>')
         .append($('<div/>').attr({'class': dialogIcon + " col-sm-1"}))
-        .append($('<div class="NE-dialog-message col-sm-11"/>')
+        .append($('<div class="ne-dialog-message col-sm-11"/>')
         .append(this._makeContent(settings.messages)))
     );
     // Dialog footer

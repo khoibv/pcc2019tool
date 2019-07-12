@@ -5,18 +5,17 @@
 
 <head>
   <th:block th:include="layout/common/head :: common-head"></th:block>
-  <title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE">Nissho Electronics Viewnam</title>
+  <title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE">Nissho Electronics Vietnam</title>
   <th:block layout:fragment="stylesheet"></th:block>
 </head>
 <body>
 <div th:replace="layout/common/header :: common-header"></div>
 
-<div id="wrapper">
-  <div class="container-fluid">
-    <div layout:fragment="content"></div>
-  </div>
+<div class="container">
+  <div layout:fragment="content"></div>
 </div>
-<div id="stp-loader"></div>
+<div id="ne-loader"></div>
+<a class="github-fork-ribbon" href="https://github.com/nev-khoibv/pcc2019tool" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
 <script th:src="@{/js/common.js}"></script>
 <div layout:fragment="script"></div>
 </body>

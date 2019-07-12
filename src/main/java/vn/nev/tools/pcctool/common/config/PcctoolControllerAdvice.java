@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import vn.nev.tools.pcctool.common.MessageCd;
-import vn.nev.tools.pcctool.common.PcctoolException;
+import vn.nev.tools.pcctool.common.exception.NEException;
 import vn.nev.tools.pcctool.dto.ResponseDto;
 import vn.nev.tools.pcctool.util.ResourceUtil;
 
@@ -29,7 +29,7 @@ public class PcctoolControllerAdvice extends ResponseEntityExceptionHandler {
       HttpStatus status = getStatus(request);
       return new ResponseEntity<>(ResponseDto.error(MessageCd.E0001, resourceUtil.getMessage(MessageCd.E0001)), status);
     } else {
-      throw new PcctoolException(ex);
+      throw new NEException(ex);
     }
   }
 
