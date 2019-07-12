@@ -87,6 +87,8 @@ application:
     exposed-headers: "Authorization,Link,X-Total-Count"
     allow-credentials: true
     max-age: 1800
+  github:
+    enable-fork: true
 
 ---
 # Configuration for production env
@@ -128,4 +130,6 @@ application:
     exposed-headers: "Authorization,Link,X-Total-Count"
     allow-credentials: true
     max-age: 1800
+  github:
+    enable-fork: false
 

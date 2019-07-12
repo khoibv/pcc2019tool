@@ -15,7 +15,11 @@
   <div layout:fragment="content"></div>
 </div>
 <div id="ne-loader"></div>
-<a class="github-fork-ribbon" href="https://github.com/nev-khoibv/pcc2019tool" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
+<a class="github-fork-ribbon"
+   th:if="${@environment.getProperty('application.github.enable-fork') == 'true'}"
+   href="https://github.com/nev-khoibv/pcc2019tool"
+   data-ribbon="Fork me on GitHub"
+   title="Fork me on GitHub">Fork me on GitHub</a>
 <script th:src="@{/js/common.js}"></script>
 <div layout:fragment="script"></div>
 </body>
