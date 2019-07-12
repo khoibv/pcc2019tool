@@ -1,10 +1,60 @@
 package vn.nev.tools.pcctool.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+import vn.nev.tools.pcctool.util.NEUtil;
+
 public class Sample {
 
 
-  public static void main(String[] args) {
-    String source = "conSCH_NEXT          = 'SELECT' +\n"
+  public static void main(String[] args) throws IOException {
+//    test01();
+
+//    System.out.println(NEUtil.toPascalCase("SAMPLE_COLUMN_NAME"));
+//
+//    String msg = MessageFormat.format("public String set{0}(String {1}) '{' this.{1} = {1}; '}'", "Name", "name");
+//    System.out.println(msg);
+
+    test02();
+  }
+
+  private static void test02() throws IOException {
+
+    List<String> args = Arrays.asList("Sample", "Zip");
+
+    String outputFile = "/Users/khoibv/tmp/new.zip";
+    StringBuilder sb = new StringBuilder();
+    sb.append("Test String");
+
+    File f = new File(outputFile);
+    ZipOutputStream out = new ZipOutputStream(new FileOutputStream(f));
+    ZipEntry e = new ZipEntry("mytext.txt");
+    out.putNextEntry(e);
+
+    byte[] data = sb.toString().getBytes();
+    out.write(data, 0, data.length);
+    out.closeEntry();
+
+    ZipEntry e2 = new ZipEntry("child/text2.txt");
+    out.putNextEntry(e2);
+
+    byte[] data2 = "Another string".getBytes();
+    out.write(data2, 0, data2.length);
+    out.closeEntry();
+
+    out.close();
+  }
+
+  private static void test01() {
+    String source = "conSCH_NEXT          = 'SELECT ABC,' +\n"
         + "                           ' TERM_CODE,' +\n"
         + "                           ' TERM_DATE,' +\n"
         + "                           ' NEXT_CODE,' +\n"
@@ -114,18 +164,27 @@ public class Sample {
         .replaceAll("\\s+\\/\\/.*", "")
         .replaceAll("\'(.*)\'", "$1")
         .replaceAll("''", "'")
-        .replaceAll("\\+\\r\\n","\r\n")  // xóa dấu + ở cuối dòng (Windows)
-        .replaceAll("\\+\\n","\n")  // xóa dấu + ở cuối dòng (Linux)
-        .replaceAll("\\+$","")  // xóa dấu + cuối cùng
-    ;
+        .replaceAll("\\+\\r\\n", "\r\n")  // xóa dấu + ở cuối dòng (Windows)
+        .replaceAll("\\+\\n", "\n")  // xóa dấu + ở cuối dòng (Linux)
+        .replaceAll("\\+$", "")  // xóa dấu + cuối cùng
+        ;
     System.out.println(converted);
     System.out.println("=============FIELDS=============");
 
     String fields = converted
-        .replaceAll("\\r\\n"," ")
-        .replaceAll("\\r"," ")
-        .replaceAll("\\n"," ")
-        .replaceAll(".*SELECT(.*)FROM.*", "$1");
+        .replaceAll("\\r\\n", " ")
+        .replaceAll("\\r", " ")
+        .replaceAll("\\n", " ")
+        .replaceAll("[\\s\\S]*SELECT([\\s\\S]*)FROM[\\s\\S]*", "$1");
+
+//    Pattern columnRegex  = Pattern.compile("[\\s\\S]*SELECT([\\s\\S]*)FROM[\\s\\S]*", Pattern.MULTILINE);
+//    Matcher matcher = columnRegex.matcher(converted);
+//    if(matcher.find()) {
+//      System.out.println("Found match: " + matcher.group(1));
+//    } else {
+//      System.out.println("Not found");
+//    }
+
     System.out.println(fields);
   }
 

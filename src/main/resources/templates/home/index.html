@@ -7,36 +7,62 @@
 </head>
 <th:block layout:fragment="content">
 
-  <form th:object="${convertion}" th:action="@{/convert}" method="post">
+  <div class="form-group">
+    <input type="text" id="serviceId" placeholder="Service ID, e.g ACJ_D011_005_01" value="ACJ_D999_999_99">
+    <input type="text" id="author" placeholder="author, e.g khoibv" value="khoibv">
+  </div>
+
+  <div class="form-group row required">
     <div class="text-right">
-      <button type="submit" class="btn btn-primary" th:text="#{common.convert}">Save</button>
+      <button type="submit" class="btn btn-primary btn-conversion" th:text="#{common.convert}">
+        Save
+      </button>
     </div>
 
-    <div class="form-group row required">
-      <label for="query"
-             class="col-sm-2 control-label"
-             th:text="#{convertion.query}">style</label>
-      <div class="col-sm-10">
-        <textarea
-            class="form-control"
-            rows="30"
-            id="query"
-            th:maxlength="${T(vn.nev.tools.pcctool.common.ColumnLengths).QUERY}"
-            th:field="*{query}"
-            th:errorclass="is-invalid"></textarea>
-        <span class="invalid-feedback"
-              th:if="${#fields.hasErrors('query')}"
-              th:errors="*{query}"></span>
+    <div class="col-sm-6">
+      <div class="input-group">
+        <input type="text"
+               id="outParam"
+               class="inputColumns"
+               th:placeholder="#{conversion.outParam}"
+               data-target="outParamList"/>
+        <div class="input-group-append">
+          <button type="button" class="btn btn-info">Add</button>
+        </div>
       </div>
+      <ul id="outParamList"></ul>
     </div>
 
-    <div class="text-right">
-      <button type="submit" class="btn btn-primary" th:text="#{common.convert}">Save</button>
+    <div class="col-sm-6">
+      <div class="input-group">
+        <input type="text"
+               id="inParam"
+               class="inputColumns"
+               th:placeholder="#{conversion.inParam}"
+               data-target="inParamList"/>
+        <div class="input-group-append">
+          <button type="button" class="btn btn-info">Add</button>
+        </div>
+      </div>
+      <ul id="inParamList"></ul>
     </div>
-  </form>
-
+  </div>
 </th:block>
+
 <th:block layout:fragment="script">
-</th:block>
+  <script type="text/javascript" th:inline="javascript">
 
+    $.extend(true, NE, {
+      urls: {
+        convert: /*[[@{/convert}]]*/ null,
+      },
+      messages: {
+        confirmDelete: /*[[#{C0001}]]*/ 'Are you sure?',
+      }
+    });
+
+
+  </script>
+  <script th:src="@{/js/conversion.js}"></script>
+</th:block>
 </html>

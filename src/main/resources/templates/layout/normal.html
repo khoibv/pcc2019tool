@@ -12,14 +12,12 @@
 <div th:replace="layout/common/header :: common-header"></div>
 
 <div id="wrapper">
-  <div id="page-content-wrapper">
-    <div class="stp-main-content">
-      <div layout:fragment="content"></div>
-    </div>
+  <div class="container-fluid">
+    <div layout:fragment="content"></div>
   </div>
 </div>
 <div id="stp-loader"></div>
-<!--<script th:src="@{/js/common.js}"></script>-->
+<script th:src="@{/js/common.js}"></script>
 <div layout:fragment="script"></div>
 </body>
 </html>

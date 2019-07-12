@@ -8,7 +8,7 @@ spring:
     date-format: "yyyy/MM/dd"
   thymeleaf:
     prefix: classpath:/templates/
-  servlet:
+#  servlet:
     multipart:
       enabled: true
       # Threshold after which files will be written to disk.

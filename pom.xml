@@ -18,7 +18,7 @@
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<sass-maven-plugin.version>3.7.0</sass-maven-plugin.version>
+		<sass-maven-plugin.version>3.7.2</sass-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -48,8 +48,9 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.8.1</version>
+			<version>3.9</version>
 		</dependency>
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -8,6 +8,9 @@ public class Constants {
   public static final String COMMA = ",";
   public static final String STRING_JOIN_COMMA = ", ";
 
+  public static final String LINE_SEPARATOR = System.lineSeparator();
+  public static final String LINE_SEPARATOR_WINDOWS = "\r\n";
+
   public static final int RANGE_FILTER_DAY = -25;
 
   public static final String TASK_CONVERSATION_CODE_FORMAT = "TASK-{0}";

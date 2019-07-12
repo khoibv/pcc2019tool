@@ -1,5 +1,5 @@
 "use strict";
-var STPprocessing = false;
+var NEprocessing = false;
 if (typeof NProgress !== 'undefined') {
   window.onload = function () {
     controlProcessingStatus();
@@ -12,12 +12,12 @@ if (typeof NProgress !== 'undefined') {
  * (on Chrome, document.ready run before window.onload)
  */
 function controlProcessingStatus() {
-  if (STPprocessing) {
+  if (NEprocessing) {
     NProgress.done();
-    STPprocessing = false;
+    NEprocessing = false;
   } else {
     NProgress.start();
-    STPprocessing = true;
+    NEprocessing = true;
   }
 }
 
@@ -40,10 +40,10 @@ $(function () {
     var csrfToken = $("meta[name='_csrf']").attr('content');
     xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
   }).ajaxStart(function () {
-    $('#stp-loader').show();
+    $('#NE-loader').show();
     NProgress.start();
   }).ajaxStop(function () {
-    $('#stp-loader').hide();
+    $('#NE-loader').hide();
     NProgress.done();
   });
 
@@ -58,13 +58,13 @@ $(function () {
    */
   $('#logout').on('click', function (e) {
     e.preventDefault();
-    STP.submit(STP.urls.logout)
+    NE.submit(NE.urls.logout)
   });
 
 })
 
-var STP = STP || {};
-$.extend(true, STP, {
+var NE = NE || {};
+$.extend(true, NE, {
   urls: {},
   messages: {},
   labels: {},
@@ -89,7 +89,7 @@ $.extend(true, STP, {
               if (options.error) {
                 options.error(retData.messages);
               } else {
-                STP.Dialog.error({
+                NE.Dialog.error({
                   messages: retData.messages
                 });
               }
@@ -193,7 +193,7 @@ $.extend(true, STP, {
         if (options.error) {
           options.error(jqXHR, textStatus, errorThrown);
         } else {
-          STP.Dialog.error({ messages: 'System error occurs' });
+          NE.Dialog.error({ messages: 'System error occurs' });
           console.log(jqXHR, textStatus, errorThrown);
         }
       },
@@ -207,11 +207,11 @@ $.extend(true, STP, {
 
   /**
    * Update moment date (a minute ago, 2 hours ago, ...)
-   * Target: DOM have `.stp-moment-date` class and timestamp stored in attribute `data-timestamp`
+   * Target: DOM have `.NE-moment-date` class and timestamp stored in attribute `data-timestamp`
    * @param container Update in this container. If container is null or underfined, update in all page
    */
   updateMomentDate: function (container) {
-    var target = container ? $(container + ' .stp-moment-date') : $('.stp-moment-date');
+    var target = container ? $(container + ' .NE-moment-date') : $('.NE-moment-date');
     target.each(function (index, item) {
       var originalDate = $(item).data('timestamp');
       $(item).html(moment(originalDate).fromNow());
@@ -222,7 +222,7 @@ $.extend(true, STP, {
 /**
  * Dialog utility
  */
-STP.Dialog = {
+NE.Dialog = {
   /**
    * Show dialog
    * settings: dialog settings
@@ -254,14 +254,14 @@ STP.Dialog = {
     }, settings);
     settings.title = settings.title || settings.dialogType.toUpperCase();
     var dialogContainer = $("<div/>").attr({
-      id: 'STP-dialog-' + new Date().getTime(),
-      'class': 'modal fade STP-modal-dialog',
+      id: 'NE-dialog-' + new Date().getTime(),
+      'class': 'modal fade NE-modal-dialog',
       'role': 'dialog'
     });
 
-    var STPDialog = this._createDialog(dialogContainer, settings);
-    $('body').append(STPDialog);
-    STPDialog.on('hide.bs.modal', function () {
+    var NEDialog = this._createDialog(dialogContainer, settings);
+    $('body').append(NEDialog);
+    NEDialog.on('hide.bs.modal', function () {
       // Get button clicked
       var button = $(dialogContainer).find('input[name=dialog-result]').val();
 
@@ -274,7 +274,7 @@ STP.Dialog = {
           settings.cancel && settings.cancel();
           break;
       }
-      $(STPDialog).remove();
+      $(NEDialog).remove();
     }).modal({
       backdrop: 'static',
       keyboard: false
@@ -312,7 +312,7 @@ STP.Dialog = {
    * Hide a dialog
    */
   hide: function () {
-    $('div.STP-modal-dialog.modal[role=dialog]').empty();
+    $('div.NE-modal-dialog.modal[role=dialog]').empty();
     $('div.modal-backdrop').remove();
   },
 
@@ -343,7 +343,7 @@ STP.Dialog = {
         textColor = 'text-primary';
         break;
     }
-    dialogIcon = "STP-dialog-icon fas fa-" + dialogIcon + ' ' + textColor;
+    dialogIcon = "NE-dialog-icon fas fa-" + dialogIcon + ' ' + textColor;
 
     // Dialog header
     var header = $('<div class="modal-header" />').append(
@@ -353,7 +353,7 @@ STP.Dialog = {
     var body = $('<div class="modal-body" />')
     .append($('<div class="row"/>')
         .append($('<div/>').attr({'class': dialogIcon + " col-sm-1"}))
-        .append($('<div class="STP-dialog-message col-sm-11"/>')
+        .append($('<div class="NE-dialog-message col-sm-11"/>')
         .append(this._makeContent(settings.messages)))
     );
     // Dialog footer
@@ -434,7 +434,7 @@ var ButtonType = {
  *
  * @type {{}}
  */
-STP.Storage = {
+NE.Storage = {
   set: function (key, value) {
     this.getInstance().setItem(key, value);
   },
