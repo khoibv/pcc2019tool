@@ -5,8 +5,11 @@
 
 <body>
   <nav th:fragment="common-header" class="site-header sticky-top py-1">
-    <div class="container d-flex flex-column flex-md-row justify-content-between">
-      <a class="py-2" th:href="@{/}">NEV</a>
+    <div class="container d-flex flex-column flex-md-row py-2">
+      <a class="mr-2" th:href="@{/}">
+        <img th:src="@{/img/logo.png}" class="ne-logo">
+      </a>
+      <a class="mx-2 d-none d-md-inline-block" th:href="@{/}" th:text="#{common.convert}">Generate code</a>
     </div>
   </nav>
 </body>

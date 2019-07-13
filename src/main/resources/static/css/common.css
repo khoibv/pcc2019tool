@@ -1,11 +1,17 @@
-li {
+ul li {
   list-style-type: none;
+}
+.ne-dialog-message ul {
+  margin-bottom: 0;
 }
 .ne-dialog-icon {
   font-size: 40px;
 }
 button, input[type=button] {
   min-width: 80px;
+}
+.ne-logo {
+  height: 20px;
 }
 .site-header{background-color:rgba(0,0,0,0.85);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px)}.site-header a{color:#999;transition:ease-in-out color .15s}.site-header a:hover{color:#fff;text-decoration:none}.overflow-hidden{overflow:hidden}
 /*# sourceMappingURL=common.css.map */

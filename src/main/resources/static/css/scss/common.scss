@@ -1,5 +1,9 @@
-li {
+ul li {
   list-style-type: none;
+}
+
+.ne-dialog-message ul {
+  margin-bottom: 0;
 }
 
 .ne-dialog-icon {
@@ -8,6 +12,10 @@ li {
 
 button, input[type=button] {
   min-width: 80px;
+}
+
+.ne-logo {
+  height: 20px;
 }
 
 /*
