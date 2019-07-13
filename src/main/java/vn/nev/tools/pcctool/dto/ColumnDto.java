@@ -48,11 +48,19 @@ public class ColumnDto {
             + "  '}'", this.columnNamePascal, this.columnNameCamel);
   }
 
+  public String getGetterSetterString() {
+    return String.format("%s%s%s",
+        getGetterString(),
+        Constants.LINE_SEPARATOR_WINDOWS2,
+        getSetterString());
+  }
+
   /**
    * Tạo chuỗi ký tự định dạng target.setCompanyCode(source.getCompanyCode());
    */
   public String getCopyString(String source, String target) {
-    return String.format("    %s.set%s(%s.get%s);", target, columnNamePascal, source, columnNamePascal);
+    return String.format("    %s.set%s(%s.get%s());",
+        target, columnNamePascal, source, columnNamePascal);
   }
 
   public String getColumnName() {

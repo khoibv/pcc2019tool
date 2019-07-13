@@ -3,8 +3,6 @@ package vn.nev.tools.pcctool.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -49,31 +47,26 @@ public class ConversionService extends BaseService implements IConversionService
     responseDto.setService(generateService(conversion));
     responseDto.setDataAccess(generateDataAccess(conversion));
 
-//    LOG.info("*******************Converted: " + responseDto);
-
     return responseDto;
   }
 
   @Override
-  public void createZipFile(ConversionResponseDto conversion, String outputFile) {
+  public void createZipFile(final ConversionResponseDto conversion, String outputFile) {
 
-    String path = "acc_ejb/ejbModule/jp/co/nissho_ele/acc/acj";
+    final String path = "acc_ejb/ejbModule/jp/co/nissho_ele/acc/acj";
     File file = new File(outputFile);
+    String serviceId = conversion.getServiceId();
 
-    Map<String, String> fileContents = new HashMap<>();
-    fileContents.put("/bean/" + conversion.getServiceId() + "InBean.java", conversion.getInBean());
-    fileContents
-        .put("/bean/" + conversion.getServiceId() + "OutBean.java", conversion.getOutBean());
-    fileContents
-        .put("/entity/access/" + conversion.getAccessName() + ".java", conversion.getDataAccess());
-    fileContents.put("/entity/dto/" + conversion.getDtoName() + ".java", conversion.getDto());
-    fileContents
-        .put("/service/" + conversion.getServiceId() + "Service.java", conversion.getService());
-    fileContents.put("/service/" + conversion.getServiceId() + "ServiceRemote.java",
-        conversion.getServiceRemote());
+    Map<String, String> map = new HashMap<>();
+    map.put("/bean/" + serviceId + "InBean.java", conversion.getInBean());
+    map.put("/bean/" + serviceId + "OutBean.java", conversion.getOutBean());
+    map.put("/entity/access/" + conversion.getAccessName() + ".java", conversion.getDataAccess());
+    map.put("/entity/dto/" + conversion.getDtoName() + ".java", conversion.getDto());
+    map.put("/service/" + serviceId + "Service.java", conversion.getService());
+    map.put("/service/" + serviceId + "ServiceRemote.java", conversion.getServiceRemote());
 
     try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(file))) {
-      for (Entry<String, String> entry : fileContents.entrySet()) {
+      for (Entry<String, String> entry : map.entrySet()) {
         String filePath = path + entry.getKey();
         String content = entry.getValue();
 
@@ -96,15 +89,13 @@ public class ConversionService extends BaseService implements IConversionService
     modelData.put("currentDate", NEUtil.formatDate(new Date(), Constants.DateFormat.YYYY_MM_DD));
     modelData.put("fields", conversion.getSelectColumns()
         .stream()
-        .map(column -> String.format("%s\r\n", column.getFieldDeclaration()))
-        .collect(Collectors.joining("\r\n")));
+        .map(ColumnDto::getFieldDeclaration)
+        .collect(Collectors.joining(Constants.LINE_SEPARATOR_WINDOWS2)));
 
     modelData.put("getterSetters", conversion.getSelectColumns()
         .stream()
-        .map(column -> String.format("%s\r\n\r\n%s",
-            column.getGetterString(),
-            column.getSetterString())
-        ).collect(Collectors.joining("\r\n\r\n")));
+        .map(ColumnDto::getGetterSetterString)
+        .collect(Collectors.joining(Constants.LINE_SEPARATOR_WINDOWS2)));
 
     return generateFile("files/bean/inBean", modelData);
   }
@@ -127,19 +118,25 @@ public class ConversionService extends BaseService implements IConversionService
 
     List<ColumnDto> dtoColumns = new ArrayList<>();
     dtoColumns.addAll(conversion.getWhereColumns());
-    dtoColumns.addAll(conversion.getSelectColumns());
+    dtoColumns.addAll(conversion.getSelectColumns()
+        .stream()
+        .filter(colSelect -> conversion.getWhereColumns()
+            .stream()
+            // Tránh add các column trùng lặp trong cả IN và OUT
+            .noneMatch(colWhere -> colWhere.getColumnNamePascal()
+                .equals(colSelect.getColumnNamePascal())))
+        .collect(Collectors.toList())
+    );
 
     modelData.put("fields", dtoColumns
         .stream()
-        .map(column -> String.format("%s\r\n", column.getFieldDeclaration()))
-        .collect(Collectors.joining("\r\n")));
+        .map(ColumnDto::getFieldDeclaration)
+        .collect(Collectors.joining(Constants.LINE_SEPARATOR_WINDOWS2)));
 
     modelData.put("getterSetters", dtoColumns
         .stream()
-        .map(column -> String.format("%s\r\n\r\n%s",
-            column.getGetterString(),
-            column.getSetterString())
-        ).collect(Collectors.joining("\r\n\r\n")));
+        .map(ColumnDto::getGetterSetterString)
+        .collect(Collectors.joining(Constants.LINE_SEPARATOR_WINDOWS2)));
 
     return generateFile("files/dto/dto", modelData);
   }
@@ -162,7 +159,6 @@ public class ConversionService extends BaseService implements IConversionService
     String serviceTemplate = "files/service/service" + conversion.getServiceType().getType();
 
     return generateFile(serviceTemplate, modelData);
-
   }
 
   private String generateServiceRemote(ConversionRequestDto conversion) {
@@ -173,7 +169,6 @@ public class ConversionService extends BaseService implements IConversionService
 
     return generateFile("files/service/serviceRemote", modelData);
   }
-
 
   private String generateDataAccess(ConversionRequestDto conversion) {
 
@@ -199,16 +194,15 @@ public class ConversionService extends BaseService implements IConversionService
   private String generateRAccess(ConversionRequestDto conversion, Map<String, Object> modelData) {
     String setParamDtoString = conversion.getWhereColumns()
         .stream()
-        .map(column -> String
-            .format("    whereList.add(whereDto.get%s());", column.getColumnNamePascal()))
+        .map(column -> String.format("    whereList.add(whereDto.get%s());",
+            column.getColumnNamePascal()))
         .collect(Collectors.joining(Constants.LINE_SEPARATOR_WINDOWS));
     modelData.put("setParamDtoString", setParamDtoString);
 
     String copyDbToRetDtoString = conversion.getSelectColumns()
         .stream()
-        .map(column -> String
-            .format("        retDto.set%s(rs.getString(\"%s\"));", column.getColumnNamePascal(),
-                column.getColumnName()))
+        .map(column -> String.format("        retDto.set%s(rs.getString(\"%s\"));",
+            column.getColumnNamePascal(), column.getColumnName()))
         .collect(Collectors.joining(Constants.LINE_SEPARATOR_WINDOWS));
     modelData.put("copyDbToRetDtoString", copyDbToRetDtoString);
 
@@ -222,8 +216,8 @@ public class ConversionService extends BaseService implements IConversionService
 
     String registerInParametersString = conversion.getWhereColumns()
         .stream()
-        .map(column -> String
-            .format("      cstmt.setString(i++, inDto.get%s());", column.getColumnNamePascal()))
+        .map(column -> String.format("      cstmt.setString(i++, inDto.get%s());",
+            column.getColumnNamePascal()))
         .collect(Collectors.joining(Constants.LINE_SEPARATOR_WINDOWS));
     modelData.put("registerInParametersString", registerInParametersString);
 
@@ -235,8 +229,8 @@ public class ConversionService extends BaseService implements IConversionService
 
     String copyDbToRetDtoString = conversion.getSelectColumns()
         .stream()
-        .map(column -> String
-            .format("        retDto.set%s(cstmt.getString(i++));", column.getColumnNamePascal()))
+        .map(column -> String.format("        retDto.set%s(cstmt.getString(i++));",
+            column.getColumnNamePascal()))
         .collect(Collectors.joining(Constants.LINE_SEPARATOR_WINDOWS));
     modelData.put("copyDbToRetDtoString", copyDbToRetDtoString);
 
@@ -251,8 +245,7 @@ public class ConversionService extends BaseService implements IConversionService
   private String generateFile(String templateName, Map<String, Object> modelData) {
     Context context = new Context(Locale.getDefault());
     modelData.forEach(context::setVariable);
-    String content = templateEngine.process(templateName, context);
 
-    return content;
+    return templateEngine.process(templateName, context);
   }
 }

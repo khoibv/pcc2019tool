@@ -10,6 +10,7 @@ public class Constants {
 
   public static final String LINE_SEPARATOR = System.lineSeparator();
   public static final String LINE_SEPARATOR_WINDOWS = "\r\n";
+  public static final String LINE_SEPARATOR_WINDOWS2 = "\r\n\r\n";
 
   public static final int RANGE_FILTER_DAY = -25;
 
@@ -21,6 +22,7 @@ public class Constants {
   public static final String TASK_DETAIL_NAME_FORMAT = "{0} - {1}";
 
   public static final String APPLICATION_EXCEL = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+  public static final String APPLICATION_ZIP = "application/zip";
 
   /**
    * URL

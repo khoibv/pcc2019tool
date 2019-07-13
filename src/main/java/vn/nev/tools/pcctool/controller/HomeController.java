@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import vn.nev.tools.pcctool.common.Constants;
 import vn.nev.tools.pcctool.common.Constants.DateFormat;
 import vn.nev.tools.pcctool.common.Constants.Session;
 import vn.nev.tools.pcctool.common.exception.NEIOException;
@@ -31,8 +32,6 @@ import vn.nev.tools.pcctool.util.SessionUtil;
 
 @Controller
 public class HomeController extends BaseController {
-
-  private static final String CONTENT_TYPE = "application/zip";
 
   @Autowired
   private Environment environment;
@@ -54,15 +53,13 @@ public class HomeController extends BaseController {
 
     ConversionResponseDto responseDto = conversionService.convert(conversion);
 
-    String filename = String
-        .format("%s_%s.zip", conversion.getServiceId(), NEUtil.formatDate(new Date(),
-            DateFormat.YYYYMMDD_HHMMSS));
-    Path path = Paths.get(environment.getProperty("application.path.download"), conversion.getAuthor());
-    String zipFilePath = Paths
-        .get(path.toString(), filename)
-        .toString();
+    String filename = String.format("%s_%s.zip", conversion.getServiceId(),
+        NEUtil.formatDate(new Date(), DateFormat.YYYYMMDD_HHMMSS));
+    Path path = Paths.get(environment.getProperty("application.path.download"),
+        conversion.getAuthor());
+    String zipFilePath = Paths.get(path.toString(), filename).toString();
 
-    if(!Files.exists(path)) {
+    if (!Files.exists(path)) {
       try {
         Files.createDirectories(path);
       } catch (IOException e) {
@@ -80,7 +77,7 @@ public class HomeController extends BaseController {
   }
 
 
-  @GetMapping(value = "download", produces = CONTENT_TYPE)
+  @GetMapping(value = "download", produces = Constants.APPLICATION_ZIP)
   public void downloadZip(String downloadId, HttpServletResponse response) {
 
     DownloadDto downloadDto = SessionUtil.get(Session.DOWNLOAD_FILE);
@@ -94,8 +91,7 @@ public class HomeController extends BaseController {
     }
 
     try (InputStream inputStream = new FileInputStream(file)) {
-      // copy it to response's OutputStream
-      response.setContentType(CONTENT_TYPE);
+      response.setContentType(Constants.APPLICATION_ZIP);
       response.setHeader("Content-Disposition", "attachment;filename=" + downloadDto.getFileName());
       response.setHeader("Content-Length", String.valueOf(file.length()));
 

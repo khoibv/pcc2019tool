@@ -37,25 +37,8 @@ server:
 # Configuration for development env
 spring:
   profiles: development
-  datasource:
-    url: jdbc:mysql://localhost:3306/stp_salary?useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
-    username: stp_salary
-    password: stp_salary
-    initialization-mode: always
   thymeleaf:
     cache: false
-  jpa:
-    hibernate:
-      #      ddl-auto: create
-      ddl-auto: update
-    generate-ddl: true
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-        ejb.interceptor.session_scoped: vn.stp.common.config.AuditLog
-#        ejb.interceptor: vn.stp.common.config.AuditLog
-    open-in-view: true
   main:
     allow-bean-definition-overriding: true
   resources:
@@ -63,19 +46,8 @@ spring:
     static-locations: classpath:/resources/static
     cache:
       period: 0
-  mail:
-    host: localhost
-    port: 2500
-    username:
-    password:
-    properties:
-    - mail.smtp.auth: true
-    - mail.smtp.starttls.enable: true
 
 application:
-  base-url: http://localhost:88/salary
-  mail:
-    from: stpvn.adm@gmail.com
   path:
     upload: /Users/khoibv/tmp/stp/upload
     download: /Users/khoibv/tmp/stp/download
@@ -94,31 +66,10 @@ application:
 # Configuration for production env
 spring:
   profiles: production
-  datasource:
-    url: jdbc:mysql://localhost:3306/stp_salary?useUnicode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Ho_Chi_Minh&useSSL=true&requireSSL=false
-    username: stp_salary
-    password: stp_salary
-    initialization-mode: never
   thymeleaf:
     cache: true
-  jpa:
-    show-sql: true
-    open-in-view: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: stpvn.adm@gmail.com
-    password: THwStuBdBU6T4P2
-    properties:
-      mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
-    protocol: smtp
 
 application:
-  base-url: http://35.187.244.67:8080/salary # Modify according to your server's URL
   path:
     upload: /var/stp/files/upload
     download: /var/stp/files/download

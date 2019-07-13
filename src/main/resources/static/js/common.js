@@ -203,19 +203,6 @@ $.extend(true, NE, {
         }
       }
     };
-  },
-
-  /**
-   * Update moment date (a minute ago, 2 hours ago, ...)
-   * Target: DOM have `.NE-moment-date` class and timestamp stored in attribute `data-timestamp`
-   * @param container Update in this container. If container is null or underfined, update in all page
-   */
-  updateMomentDate: function (container) {
-    var target = container ? $(container + ' .NE-moment-date') : $('.NE-moment-date');
-    target.each(function (index, item) {
-      var originalDate = $(item).data('timestamp');
-      $(item).html(moment(originalDate).fromNow());
-    });
   }
 });
 
