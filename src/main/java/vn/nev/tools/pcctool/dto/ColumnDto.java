@@ -52,7 +52,7 @@ public class ColumnDto {
    * Tạo chuỗi ký tự định dạng target.setCompanyCode(source.getCompanyCode());
    */
   public String getCopyString(String source, String target) {
-    return String.format("    %s.set%s(%s.get%s);", target, columnNamePascal, source, columnNamePascal);
+    return String.format("    %s.set%s(%s.get%s());", target, columnNamePascal, source, columnNamePascal);
   }
 
   public String getColumnName() {
