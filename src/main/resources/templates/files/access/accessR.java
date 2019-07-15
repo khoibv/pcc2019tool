@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.co.nissho_ele.acc.acj.entity.dto.[(${dtoName})];
-import jp.co.nissho_ele.acc.base_package.common.util.ACCConvertUtil;
 import jp.co.nissho_ele.acc.base_package.entity.access.AccessBase;
 
 /**
@@ -85,7 +84,7 @@ public class [(${accessName})] extends AccessBase {
   /**
    * Set parameterDto.
    *
-   * @param whereDto
+   * @param whereDto whereDto
    * @return whereList paramDto.
    */
   private List<String> setParamDto([(${dtoName})] whereDto) {
@@ -97,6 +96,8 @@ public class [(${accessName})] extends AccessBase {
   }
 
   /**
+   * Get query string (select1).
+   *
    * @return sql1 statement.
    */
   private static String getSelect1Sql() {

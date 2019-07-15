@@ -87,12 +87,12 @@ public class ConversionService extends BaseService implements IConversionService
     modelData.put("serviceId", conversion.getServiceId());
     modelData.put("author", conversion.getAuthor());
     modelData.put("currentDate", NEUtil.formatDate(new Date(), Constants.DateFormat.YYYY_MM_DD));
-    modelData.put("fields", conversion.getSelectColumns()
+    modelData.put("fields", conversion.getWhereColumns()
         .stream()
         .map(ColumnDto::getFieldDeclaration)
         .collect(Collectors.joining(Constants.LINE_SEPARATOR_WINDOWS2)));
 
-    modelData.put("getterSetters", conversion.getSelectColumns()
+    modelData.put("getterSetters", conversion.getWhereColumns()
         .stream()
         .map(ColumnDto::getGetterSetterString)
         .collect(Collectors.joining(Constants.LINE_SEPARATOR_WINDOWS2)));

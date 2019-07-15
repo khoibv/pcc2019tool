@@ -59,7 +59,7 @@ public class [( ${serviceId} )]Service extends ServiceBase implements [( ${servi
 
     // Set value for out bean.
     if (outDtoList != null && outDtoList.size() > 0) {
-      outBean.setOutDto(outDtoList.get(0));
+      outBean.setOutDto(outDtoList);
     }
 
     return outBean;
