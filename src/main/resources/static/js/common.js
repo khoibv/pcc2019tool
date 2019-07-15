@@ -203,19 +203,6 @@ $.extend(true, NE, {
         }
       }
     };
-  },
-
-  /**
-   * Update moment date (a minute ago, 2 hours ago, ...)
-   * Target: DOM have `.NE-moment-date` class and timestamp stored in attribute `data-timestamp`
-   * @param container Update in this container. If container is null or underfined, update in all page
-   */
-  updateMomentDate: function (container) {
-    var target = container ? $(container + ' .NE-moment-date') : $('.NE-moment-date');
-    target.each(function (index, item) {
-      var originalDate = $(item).data('timestamp');
-      $(item).html(moment(originalDate).fromNow());
-    });
   }
 });
 
@@ -346,14 +333,14 @@ NE.Dialog = {
     dialogIcon = "ne-dialog-icon fas fa-" + dialogIcon + ' ' + textColor;
 
     // Dialog header
-    var header = $('<div class="modal-header" />').append(
-        $('<h4>', {'class': 'modal-title ' + textColor}).text(settings.title));
+    var header = $('<div class="modal-header d-flex justify-content-center" />').append(
+        $('<strong>', {'class': 'modal-title ' + textColor}).text(settings.title));
 
     // Dialog body
     var body = $('<div class="modal-body" />')
-    .append($('<div class="row"/>')
-        .append($('<div/>').attr({'class': dialogIcon + " col-sm-1"}))
-        .append($('<div class="ne-dialog-message col-sm-11"/>')
+    .append($('<div class="d-flex align-items-center"/>')
+        .append($('<div/>').attr({'class': dialogIcon}))
+        .append($('<div class="ne-dialog-message"/>')
         .append(this._makeContent(settings.messages)))
     );
     // Dialog footer
@@ -365,7 +352,7 @@ NE.Dialog = {
     if (settings.button === 0 || settings.button === 1)	// OK
     {
       footer.append(
-          $('<button type="button" name="ok" class="btn btn-primary" data-dismiss="modal" />')
+          $('<button type="button" name="ok" class="btn btn-primary btn-sm" data-dismiss="modal" />')
           .text(settings.buttonLabels.ok)
           .on('click', function () {
             $(dialogContainer).find('input[name=dialog-result]').val(
@@ -375,7 +362,7 @@ NE.Dialog = {
     if (settings.button === 0 || settings.button === 2)	// Cancel
     {
       footer.append(
-          $('<button type="button" name="cancel" class="btn btn-default" data-dismiss="modal" />')
+          $('<button type="button" name="cancel" class="btn btn-secondary btn-sm" data-dismiss="modal" />')
           .text(settings.buttonLabels.cancel)
           .on('click', function () {
             $(dialogContainer).find('input[name=dialog-result]').val(
@@ -452,3 +439,15 @@ NE.Storage = {
     return window.localStorage;
   }
 };
+
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) {
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+      ;
+    });
+  };
+}

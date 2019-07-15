@@ -21,6 +21,17 @@ $(function() {
 
     NE.Conversion.addColumn(target);
   });
+  $('.btn-clear').click(function() {
+    var target = $(this).closest('.card').find('.card-body ol');
+    if(!target || $(target).find('li').length <= 0) { return; }
+
+    NE.Dialog.confirm({
+      messages: NE.messages.C0001,
+      ok: function() {
+        $(target).empty();
+      }
+    });
+  });
 
   // Sự kiện click các icons trên danh sách COLUMNS
   $(document).on('click', '.delete-column', function() {
@@ -57,7 +68,7 @@ NE.Conversion = {
     });
 
     if(duplicated) {
-      NE.Dialog.error({ messages: 'Columns are duplicated' });
+      NE.Dialog.error({ messages: NE.messages.E0016 });
       return;
     }
 
@@ -87,15 +98,15 @@ NE.Conversion = {
     });
 
     if(!$('#serviceId').val()) {
-      NE.Dialog.error({ messages: 'Service ID can not be empty', ok: function() { $('#serviceId').focus(); } });
+      NE.Dialog.error({ messages: NE.messages.E0007.format('Service ID'), ok: function() { $('#serviceId').focus(); } });
       return;
     }
     if(!$('#author').val()) {
-      NE.Dialog.error({ messages: 'Author can not be empty', ok: function() { $('#author').focus(); } });
+      NE.Dialog.error({ messages: NE.messages.E0007.format('Author'), ok: function() { $('#author').focus(); } });
       return;
     }
     if(selectColumns.length === 0 && whereColumns.length === 0) {
-      NE.Dialog.error({ messages: 'Columns can not be empty', ok: function() { $('#outParam').focus(); } });
+      NE.Dialog.error({ messages: NE.messages.E0017.format('Columns'), ok: function() { $('#outParam').focus(); } });
       return;
     }
 

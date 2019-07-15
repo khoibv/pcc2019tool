@@ -24,6 +24,7 @@
                  id="serviceId"
                  class="form-control form-control-sm"
                  placeholder="Service ID, e.g ACJ_D011_005_01"
+                 maxlength="15"
                  value="ACJ_D999_999_99">
         </div>
 
@@ -35,6 +36,7 @@
                  id="author"
                  class="form-control form-control-sm"
                  placeholder="author, e.g khoibv"
+                 maxlength="20"
                  value="khoibv">
         </div>
       </div>
@@ -76,9 +78,11 @@
                    id="outParam"
                    class="form-control form-control-sm inputColumns"
                    th:placeholder="#{conversion.outParam}"
+                   th:title="#{conversion.outParam}"
                    data-target="outParamList"/>
             <div class="input-group-append">
-              <button type="button" class="btn btn-success btn-sm btn-add-column">Add</button>
+              <button type="button" class="btn btn-success btn-sm btn-add-column"><i class="fas fa-plus mr-2"></i>Add</button>
+              <button type="button" class="btn btn-secondary btn-sm btn-clear"><i class="fas fa-trash mr-2"></i>Clear</button>
             </div>
           </div>
         </div>
@@ -96,9 +100,11 @@
                    id="inParam"
                    class="form-control form-control-sm inputColumns"
                    th:placeholder="#{conversion.inParam}"
+                   th:title="#{conversion.inParam}"
                    data-target="inParamList"/>
             <div class="input-group-append">
-              <button type="button" class="btn btn-success btn-sm btn-add-column">Add</button>
+              <button type="button" class="btn btn-success btn-sm btn-add-column"><i class="fas fa-plus mr-2"></i>Add</button>
+              <button type="button" class="btn btn-secondary btn-sm btn-clear"><i class="fas fa-trash mr-2"></i>Clear</button>
             </div>
           </div>
         </div>
@@ -124,7 +130,7 @@
               <i class="fas fa-arrow-down"></i>
             </a>
             <a th:title="#{common.delete}" class="text-danger delete-column icon-button">
-              <i class="fas fa-trash"></i>
+              <i class="fas fa-times"></i>
             </a>
           </div>
         </div>
@@ -142,13 +148,12 @@
         download: /*[[@{/download}]]*/ null,
       },
       messages: {
-        confirmDelete: /*[[#{C0001}]]*/ 'Are you sure?',
+        C0001: /*[[#{C0001}]]*/ 'Are you sure?',
+        E0007: /*[[#{E0007}]]*/ '{0} is required',
+        E0016: /*[[#{E0016}]]*/ 'Columns are duplicated',
+        E0017: /*[[#{E0017}]]*/ '{0} can not be empty',
       }
     });
-
-
-
-
 
   </script>
   <script th:src="@{/js/conversion.js}"></script>

@@ -83,62 +83,15 @@ public final class MessageCd {
   public static final String E0015 = "E0015";
 
   /**
-   * There are not price list for this customer. Please create price list first
+   * Columns are duplicated
    */
   public static final String E0016 = "E0016";
 
   /**
-   * There are not price list for this type/level. Please create price list first
+   * {0} can not be empty
    */
   public static final String E0017 = "E0017";
 
-  /**
-   * Invoice is created. Can not create again
-   */
-  public static final String E0018 = "E0018";
-
-  /*********************/
-    /* ACCOUNT ERROR
-    /*********************/
-  /**
-   * User ID is duplicated<br/> Tên đăng nhập đã tồn tại trong hệ thống
-   */
-  public static final String E0100 = "E0100";
-
-  /**
-   * Email is duplicated<br/> Email đã tồn tại trong hệ thống
-   */
-  public static final String E0101 = "E0101";
-
-  /**
-   * User ID or password is incorrect<br/> Tên đăng nhập hoặc email không đúng
-   */
-  public static final String E0102 = "E0102";
-
-  /**
-   * Passwords not match<br/> Password và password xác nhận phải khớp nhau
-   */
-  public static final String E0103 = "E0103";
-
-  /**
-   * There are 2 rows with same Type and Level
-   */
-  public static final String E0110 = "E0110";
-
-  /**
-   * There are 2 rows with same Customer, Type and Level
-   */
-  public static final String E0111 = "E0111";
-
-  /**
-   * Total product of child job not equal product of main job
-   */
-  public static final String E0200 = "E0200";
-
-  /**
-   * Do not split to one child job
-   */
-  public static final String E0201 = "E0201";
 
   /*********************/
     /* INFORMATION
@@ -158,43 +111,6 @@ public final class MessageCd {
    */
   public static final String I0003 = "I0003";
 
-  /**
-   * <pre>
-   * {0} assigned to {1} a task {2}
-   *    {0}: Leader name
-   *    {1}: Editor name
-   *    {2}: Task name
-   * </pre>
-   */
-  public static final String I0004 = "I0004";
-
-  /**
-   * <pre>
-   * {0} complete task {1}
-   *    {0}: Editor name
-   *    {1}: Task name
-   * </pre>
-   */
-  public static final String I0005 = "I0005";
-
-  /**
-   * <pre>
-   * {0} completed review task {1}
-   *    {0}: Reviewer name
-   *    {1}: Task name
-   * </pre>
-   */
-  public static final String I0006 = "I0006";
-
-  /**
-   * <pre>
-   * {0} commented on task {1}: {2}
-   *    {0}: User who comment
-   *    {1}: Task name
-   *    {2}: Comment content
-   * </pre>
-   */
-  public static final String I0007 = "I0007";
 
   /*********************/
     /* CONFIRM
@@ -204,27 +120,4 @@ public final class MessageCd {
    */
   public static final String C0001 = "C0001";
 
-  /**
-   * There are different customers. Do you really want to create invoice for different customers?
-   */
-  public static final String C0002 = "C0002";
-
-    /**
-     * hour >=0 and <=8
-     */
-    public static final String E0301 = "E0301";
-    /**
-     * Total hour >=0 and <=24
-     */
-    public static final String E0302 = "E0302";
-
-  /**
-   * check block 0.5h
-   */
-  public static final String E0303 = "E0303";
-
-  /**
-   * format date yyyy-MM
-   */
-  public static final String E0304 = "E0304";
 }

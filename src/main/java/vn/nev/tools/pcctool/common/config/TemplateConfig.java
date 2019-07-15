@@ -30,8 +30,9 @@ public class TemplateConfig implements ApplicationContextAware {
   @Bean(name = "codeGenerator")
   public TemplateEngine codeGeneratorTemplateEngine() {
     final SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-    // Resolver for TEXT emails
+    // Resolver for TEXT files
     templateEngine.addTemplateResolver(codeGeneratorTemplateResolver());
+
     return templateEngine;
   }
 
@@ -44,33 +45,8 @@ public class TemplateConfig implements ApplicationContextAware {
     templateResolver.setTemplateMode(TemplateMode.TEXT);
     templateResolver.setCharacterEncoding("UTF-8");
     templateResolver.setCacheable(false);
+
     return templateResolver;
   }
-
-//  /**
-//   * Template generator Java code
-//   * @return
-//   */
-//  private ITemplateResolver codeGenerationTemplateResolver() {
-//    final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-//    templateResolver.setOrder(10);
-////    templateResolver.setApplicationContext(this.applicationContext);
-//    templateResolver.setResolvablePatterns(Collections.singleton("text/*"));
-////    templateResolver.setPrefix("classpath:/templates/");
-//    templateResolver.setSuffix(".java");
-//    templateResolver.setTemplateMode(TemplateMode.TEXT);
-//    templateResolver.setCharacterEncoding("UTF-8");
-//    templateResolver.setCacheable(false);
-//    return templateResolver;
-//  }
-//
-//  @Bean
-//  public ThymeleafViewResolver viewResolver(){
-//    templateEngine.addTemplateResolver(codeGenerationTemplateResolver());
-//
-//    final ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
-//    viewResolver.setTemplateEngine(templateEngine);
-//    return viewResolver;
-//  }
 
 }

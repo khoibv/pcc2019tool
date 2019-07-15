@@ -17,5 +17,6 @@ public class [( ${serviceId} )]InBean extends BaseInBean {
   private static final long serialVersionUID = 1L;
 
 [( ${fields} )]
+
 [( ${getterSetters} )]
 }

@@ -17,5 +17,6 @@ public class [(${dtoName})] implements Serializable {
   private static final long serialVersionUID = 1L;
 
 [( ${fields} )]
+
 [( ${getterSetters} )]
 }
