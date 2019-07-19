@@ -2,7 +2,6 @@ package jp.co.nissho_ele.acc.acj.service;
 
 import java.io.Serializable;
 import java.sql.Connection;
-import java.util.List;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -16,7 +15,7 @@ import jp.co.nissho_ele.acc.base_package.common.base.ACCMessageConst;
 import jp.co.nissho_ele.acc.base_package.service.ServiceBase;
 
 /**
- * [( ${serviceId} )]ServiceRemote.java
+ * [( ${serviceId} )]Service.java
  * --------------------------------------------------------------------------------------------*
  * History<br/>
  * Version YYYY/MM/DD Author       Content
